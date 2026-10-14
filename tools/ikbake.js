@@ -92,7 +92,11 @@ const chestAt = f => {
 	return { R, pos };
 };
 // arm keys may set "world": true -> pos is HumanoidRootPart space; segments touching a world key travel in a straight world line
-const sampleArm = (keys, f) => {
+// arm keys may instead set "aim": [x,y,z] (HumanoidRootPart space) + "reach": the fist lies on the line from the
+// moving shoulder to that point, reach studs out. Segments into/out of an aim key grow/shrink the arm along that line
+// (direction settles onto the line in the first half), so the arm locks out exactly on the aim key's frame.
+const shoulderAt = (f, side) => { const c = chestAt(f); return add(c.pos, mv(c.R, geo[side + "UpperArm"].c0)); };
+const sampleArm = (keys, f, side) => {
 	const toWorld = k => { if (k.world) return k.pos; const c = chestAt(k.f); return add(c.pos, mv(c.R, k.pos)); };
 	const toLocal = p => { const c = chestAt(f); return mv(tr(c.R), sub(p, c.pos)); };
 	if (f <= keys[0].f) return { pos: keys[0].world ? toLocal(keys[0].pos) : keys[0].pos, pole: keys[0].pole };
@@ -101,6 +105,21 @@ const sampleArm = (keys, f) => {
 		if (f <= b.f) {
 			const t = EASE[a.ease || "linear"]((f - a.f) / (b.f - a.f));
 			const pole = a.pole.map((v, j) => v + (b.pole[j] - v) * t);
+			if (a.aim || b.aim) {
+				const S = shoulderAt(f, side), c = chestAt(f);
+				const endpoint = k => {
+					if (k.aim) return { d: norm(sub(k.aim, S)), r: k.reach };
+					const w = k.world ? k.pos : add(c.pos, mv(c.R, k.pos));
+					const v = sub(w, S);
+					return { d: norm(v), r: len(v) };
+				};
+				const A = endpoint(a), B = endpoint(b);
+				let s = t;
+				if (!a.aim && b.aim) s = Math.min(1, t * 2);
+				else if (a.aim && !b.aim) s = t;
+				const dir = norm(add(scale(A.d, 1 - s), scale(B.d, s)));
+				return { pos: toLocal(add(S, scale(dir, A.r + (B.r - A.r) * t))), pole };
+			}
 			if (!a.world && !b.world) return { pos: a.pos.map((v, j) => v + (b.pos[j] - v) * t), pole };
 			const A = toWorld(a), B = toWorld(b);
 			return { pos: toLocal(A.map((v, j) => v + (B[j] - v) * t)), pole };
@@ -130,7 +149,7 @@ const push = (name, f, xyz) => { (out[name] = out[name] || []).push({ f, xyz });
 const warnings = [];
 for (let f = 0; f <= lastFrame; f++) {
 	for (const side of Object.keys(ik.arms || {})) {
-		const g = sampleArm(ik.arms[side], f);
+		const g = sampleArm(ik.arms[side], f, side);
 		if (ik.poles && ik.poles[side]) g.pole = sampleTargets(ik.poles[side].map(k => ({ ...k, pos: k.pole })), f).pos;
 		const S = geo[side + "UpperArm"].c0;
 		const u = sub(geo[side + "LowerArm"].c0, geo[side + "UpperArm"].c1);

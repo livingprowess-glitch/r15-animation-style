@@ -52,9 +52,9 @@ const spec = {
 		Right: [
 			R(0, [0.62, 1.1, -1.06], "inOutSine"),
 			R(K.load, [0.72, 0.98, -0.9], "outQuad"),
-			R(K.hit, [1.466, 1.41, -1.481], "outQuad", [0.6, -1, 0.1]),
-			R(K.hit + 6, [1.56, 1.459, -1.418], "outCubic", [0.6, -1, 0.1]),
-			R(K.hit + 14, [0.62, 1.1, -1.06], "linear"),
+			{ f: K.hit, aim: [-0.251, 1.066, -4.13], reach: 1.76, pole: [0.6, -1, 0.1], ease: "outQuad" },
+			{ f: K.hit + 6, aim: [-0.251, 1.066, -4.13], reach: 1.74, pole: [0.6, -1, 0.1], ease: "inOutSine" },
+			R(K.hit + 18, [0.62, 1.1, -1.06], "linear"),
 			R(K.end, [0.62, 1.1, -1.06], "linear"),
 		],
 	},
@@ -77,8 +77,8 @@ spec.poles = {
 		{ f: 0, pole: [0.5, -1, 0.1], ease: "inOutSine" },
 		{ f: K.load, pole: [1, -0.35, 0.1], ease: "inOutSine" },
 		{ f: K.hit, pole: [0.6, -1, 0.1], ease: "linear" },
-		{ f: K.hit + 6, pole: [0.6, -1, 0.1], ease: "outCubic" },
-		{ f: K.hit + 14, pole: [0.5, -1, 0.1], ease: "linear" },
+		{ f: K.hit + 6, pole: [0.6, -1, 0.1], ease: "inOutSine" },
+		{ f: K.hit + 18, pole: [0.5, -1, 0.1], ease: "linear" },
 		{ f: K.end, pole: [0.5, -1, 0.1], ease: "linear" },
 	],
 };

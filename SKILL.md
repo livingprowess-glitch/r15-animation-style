@@ -236,6 +236,20 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Drive through impact:** the load keys (body, hand, pole) use `inQuad`, so the swing accelerates into the hit (fist 0.96/frame at impact) and decelerates through the follow-through. With outQuad into the hit the fist stalled at impact (0.11) and then re-accelerated, a stutter.
   - Hooks drive through; the jab and cross keep their crisp stop at the hit.
   - Weight goes 60% → 67% rear through the follow-through.
+- (2026-10-14, user review in the Animation Editor)
+  - "The cross arm should go more toward the rig's right, a clean straight at the chin of someone in front." (The user's camera faced the rig, so "my left" = rig's right.)
+  - "The jab rotates instead of being let straight out."
+  - "Both pull back far too fast: extended at f24, fully back by f30."
+
+  Measured: the cross arm line was 29° across (the aim had forced the fist onto the head's centre line); the jab chest turned 46° while extending (the fist swept); the return took about 5 frames.
+
+  Fixes:
+  - **`ikbake.js` "aim" keys:** `{ f, aim: [opponent chin, world], reach, pole, ease }`. The fist lies on the line from the **moving shoulder** to the aim point. Into the key, the arm length grows on the segment easing, so the arm locks out **exactly on the hit frame**, and the direction settles onto the line in the first half. Out of an aim key the direction blends across the whole segment (holding it first stalled then snapped).
+  - **Aim point** = head at the hit + (0, -0.15, -3.5), the opponent's chin straight ahead. That gives the natural converging lines: jab -16°, cross +14° (mirror images).
+  - Pure world-space straight lines (`"world": true`) made the arm lock straight two frames early and slide (it reads as rotation). outCubic/inOutCubic variants clamped or spiked.
+  - **Jab:** the chest turn was cut (impact root -33, waist 0; neck +33).
+  - **Return:** hold until hit+6, then guard at **hit+18 with inOutSine**, a 12-frame bell peaking at about 0.12 (jab) and 0.19 (cross) studs/frame. The user rejected both the 5-frame snap and the old 7-frame stall plus drift.
+  - Game-speed peaks dropped (jab 2.4k, cross 2.7k): the arm unfolds instead of swinging.
 - (2026-10-14) **Installing into scripts open in a Studio editor tab:** `UpdateSourceAsync` returned ok, but `.Source` stayed old (jab and cross were open in tabs). Always verify `m.Source == src` after writing and fall back to `m.Source = src`. The install scripts now report `open in editor`.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**

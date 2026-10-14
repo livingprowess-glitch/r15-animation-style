@@ -1,0 +1,4 @@
+Workspace.KiaiRig.AnimSaves.Boxing_Jab_Orthodox | 69 keyframes | length 1.13s | Hit keyframe at 0.333s
+Workspace.AnimGallery.Boxing Jab.AnimSaves.Boxing_Jab_Orthodox | 69 keyframes | length 1.13s | Hit keyframe at 0.333s
+Workspace.KiaiRig.AnimSaves.Boxing_Cross_Orthodox | 75 keyframes | length 1.23s | Hit keyframe at 0.333s
+Workspace.AnimGallery.Boxing Cross.AnimSaves.Boxing_Cross_Orthodox | 75 keyframes | length 1.23s | Hit keyframe at 0.333s
