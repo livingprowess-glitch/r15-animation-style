@@ -264,6 +264,13 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Rear foot:** pivots yaw -35 → 0, pitch -30. The 0.52 "slide" reading is the pivot.
   - **Weight:** 22% rear at impact (committed, like the cross). Lead knee 156–164°.
   - **Speed:** drives through with inQuad loads, fist 1.15 studs/frame at impact; house return hold to hit+6 then inOutSine to guard at hit+18; roll ≤13°/frame.
+- (2026-10-14) **`Boxing_Uppercut_Orthodox`**: the **rear** (right) uppercut, the default when the user says "uppercut" for orthodox. Generator `work/mkupper.js` (from mkrhook.js), with `work/upper_body.json` and `work/upper_hand.json`; 78 frames, `Hit` f27, end f77.
+  - **Wind-up:** knee dip (root y -0.36), rear knee 96°, right shoulder drop (waist roll -6), chest coil (root -32, waist +2), weight 57% rear. Glove low and in front: chamber 0.75 ahead of the head, 1.15 below, 0.85 to the rear side → local (0.451, 0.603, -1.367). Elbow pole (0.6, -1, 0.25).
+  - **First chamber clipped:** with the glove at stomach height and the elbow tucked back (pole z 0.45), the forearm went through the chest (0.48, an ERROR).
+  - **Strike:** the legs drive up (root y -0.27 at hit; a bigger rise lifted the planted lead foot), hips +14, chest about +30, neck -28. The fist rises to the chin on the centre line 1.15 ahead (shoulder-to-fist 1.30, elbow 0.75 under the fist).
+  - **Follow-through:** to eye level (up -0.2) at hit+6. Rear pivot -12/-26, weight 30% rear at impact.
+  - The hold → guard return distance is small (about 0.17 in torso space): the uppercut finishes in front of the face, near the guard.
+- **Install gate:** never install when the limb check reports an ERROR. Check `grep -q '^ERROR' dump` first. The first uppercut install went out with a clipping error because the chain didn't stop.
 - (2026-10-14) The user renamed (or accidentally blanked) the lead hook gallery rig to " ". Find gallery rigs by their `Animation` attribute, never by name.
 - (2026-10-14) **Closing an editor tab can write its old text back.** The jab and cross were open in tabs. My forced `.Source` write matched, but when the user closed the tabs, the stale tab text replaced it (the jab came back with the pre-fix -40/-8 turn).
   - Rule: after the user closes tabs, **re-install and verify from a separate bridge request**, by exact source comparison against the local file. Then rebuild the `AnimSaves` copies from the verified modules.

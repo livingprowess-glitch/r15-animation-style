@@ -1,2 +1,4 @@
-ReplicatedStorage.AnimReader.Animations.Boxing_RearHook_Orthodox match true
-Workspace.KiaiRig.AnimSaves.Boxing_RearHook_Orthodox | 78 keyframes
+ReplicatedStorage.AnimReader.Animations.Boxing_Uppercut_Orthodox match true
+gallery rig at 26.971105575561523, 0.604168176651001, 13.041038513183594
+Workspace.KiaiRig.AnimSaves.Boxing_Uppercut_Orthodox | 78 keyframes
+Workspace.AnimGallery.Boxing Uppercut.AnimSaves.Boxing_Uppercut_Orthodox | 78 keyframes
