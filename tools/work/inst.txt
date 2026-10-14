@@ -1,1 +1,4 @@
-ReplicatedStorage.AnimReader.Animations.Boxing_Cross_Orthodox installed, match true, builds 75 keyframes, preview now Boxing_Cross_Orthodox
+ReplicatedStorage.AnimReader.Animations.Boxing_Jab_Orthodox ok
+ReplicatedStorage.AnimReader.Animations.Boxing_Cross_Orthodox ok
+ServerScriptService.AnimGallery ok
+ServerScriptService.AnimPreview ok

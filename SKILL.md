@@ -167,6 +167,11 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Rear heel:** lifts to -20 with the ball fixed.
   - **Result:** weight about 41% rear (less committed than the cross's 22%), lead knee about 121°, aimed with `aim.js` (dx +0.9). Peak at game speed 4.1k stays under the cross's 4.5k.
   - Build order for any strike: body keys → mk*.js with placeholder hands → dump the impact frames → `aim.js` → rebuild with the aimed hands.
+- (2026-10-14, user review) **"The reset back into the idle isn't smooth" (jab and cross).** The body speed profile showed the recovery as three separate moves: it stopped at the "back" key, re-accelerated to about 530 °/s, stopped again at "settle", then drifted.
+  - Cause: every key with in/out easing forces zero velocity at that key.
+  - Rule: a recovery is **one body curve** from the follow-through key straight to the last frame (inOutSine), with no intermediate body keys. The arms ease back to guard (inOutCubic) by about f36–38 and hold there.
+  - Check: profile `analyze(...).body` across the recovery. After the 1-frame follow-through pause there must be no dip that rises again.
+- (2026-10-14) **Hand-off to a looping base.** The attack's last frame equals the idle's frame 0, but the idle underneath is usually mid-cycle. Players (AnimGallery, AnimPreview) now start the attack on `base.DidLoop` with fade 0 and set `base.TimePosition = 0` when the attack stops. The user's in-game attack system needs the same sync (or its own fade) for a seamless reset.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.

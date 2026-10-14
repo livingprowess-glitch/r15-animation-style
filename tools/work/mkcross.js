@@ -1,33 +1,27 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 15, hit: 20, over: 24, back: 42, settle: 57, end: 74 };
+const K = { load: 15, hit: 20, over: 24, back: 38, settle: 38, end: 74 };
 
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
 		{ ${K.load}, 0, -36, 2, "linear", 0.04, -0.24, 0.48 },
 		{ ${K.hit}, -7, 18, -2, "outQuad", -0.03, -0.31, 0.25 },
-		{ ${K.over}, -8, 22, -2, "outQuad", -0.03, -0.31, 0.24 },
-		{ ${K.back}, -3, -10, 0, "inOutSine", 0, -0.23, 0.37 },
-		{ ${K.settle}, -1, -23.5, 1, "inOutSine", 0.02, -0.18, 0.44 },
+		{ ${K.over}, -8, 22, -2, "inOutSine", -0.03, -0.31, 0.24 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
 		{ 0, -4, 9, -1, "inOutSine" },
 		{ ${K.load}, -3, 2, -2, "linear" },
 		{ ${K.hit}, -10, 18, 2, "outQuad" },
-		{ ${K.over}, -11, 20, 2, "outQuad" },
-		{ ${K.back}, -6, 10, 0, "inOutSine" },
-		{ ${K.settle}, -4, 9.5, -1, "inOutSine" },
+		{ ${K.over}, -11, 20, 2, "inOutSine" },
 		{ LAST_FRAME, -4, 9, -1, "linear" },
 	},
 	Head = {
 		{ 0, -7, 15, 0.5, "inOutSine" },
 		{ ${K.load}, -8, 32, 1, "linear" },
 		{ ${K.hit}, -12, -34, -1, "outQuad" },
-		{ ${K.over}, -12, -38, -1, "outQuad" },
-		{ ${K.back}, -9, 1, 0, "inOutSine" },
-		{ ${K.settle}, -7, 14, 0.5, "inOutSine" },
+		{ ${K.over}, -12, -38, -1, "inOutSine" },
 		{ LAST_FRAME, -7, 15, 0.5, "linear" },
 	},
 ` + fs.readFileSync(__dirname + "/cross.tpl", "utf8").split("\tLeftUpperArm = {")[1].replace(/^/, "\tLeftUpperArm = {");
@@ -51,18 +45,16 @@ const spec = {
 			L(0, [-0.74, 1.14, -1.14], "inOutSine"),
 			L(K.load, [-0.78, 1.12, -1.24], "outQuad"),
 			L(K.hit, [-0.6, 1.17, -1.06], "outQuad", [-0.5, -1, 0.15]),
-			L(K.over, [-0.59, 1.17, -1.05], "inOutSine", [-0.5, -1, 0.15]),
-			L(K.back, [-0.7, 1.15, -1.1], "inOutSine"),
-			L(K.settle, [-0.74, 1.14, -1.14], "linear"),
+			L(K.over, [-0.59, 1.17, -1.05], "inOutCubic", [-0.5, -1, 0.15]),
+			L(K.back, [-0.74, 1.14, -1.14], "linear"),
 			L(K.end, [-0.74, 1.14, -1.14], "linear"),
 		],
 		Right: [
 			R(0, [0.62, 1.1, -1.06], "inOutSine"),
 			R(K.load, [0.72, 0.98, -0.9], "outQuad"),
 			R(K.hit, [1.135, 1.378, -1.569], "outQuad", [1, -0.6, 0.2]),
-			R(K.over, [1.293, 1.445, -1.509], "outQuad", [1, -0.6, 0.2]),
-			R(K.back, [0.64, 1.12, -1.08], "inOutSine"),
-			R(K.settle, [0.62, 1.1, -1.06], "linear"),
+			R(K.over, [1.293, 1.445, -1.509], "inOutCubic", [1, -0.6, 0.2]),
+			R(K.back, [0.62, 1.1, -1.06], "linear"),
 			R(K.end, [0.62, 1.1, -1.06], "linear"),
 		],
 	},
@@ -76,8 +68,6 @@ const spec = {
 			idleFoot(K.load, "outQuad"),
 			pivot(K.hit, 0, -34, "outQuad"),
 			pivot(K.over, -2, -33, "inOutSine"),
-			pivot(K.back, -25, -18, "inOutSine"),
-			idleFoot(K.settle, "linear"),
 			idleFoot(K.end, "linear"),
 		],
 	},
