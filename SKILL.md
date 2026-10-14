@@ -203,6 +203,12 @@ Append each user correction here as a rule: what was wrong, which joint, and the
 
   Reverted out: the fa37bd6 single-curve body drive, the world-space straight-line fist path and Hit at f22. The cross keeps `poles.Right` (guard → flare at load → punch line (0.6, -1, 0.1) at the hit → guard).
 
+  Follow-up (user): **"The bring-back on the attack is what's throwing me off."**
+  - Measured: after the hit the fist hung frozen for about 7 frames (f21–27, ≤0.04 studs/frame), then drifted back at a 0.16–0.19 peak (about a third of extension speed) over about 10 frames.
+  - Fix, punching arm only: hit (f20) → hold key at **hit+2** (outCubic from there) → **guard at hit+10**. The cross's pole keys moved to the same frames. The body recovery is unchanged.
+  - Result: a 2-frame hold, then a 0.30 studs/frame snap-back decelerating into guard by about f28, with gradual elbow unwinding. Game-speed peaks are jab 3.5k, cross 4.6k.
+  - Rule: **a punch returns nearly as fast as it lands.** Hold at most about 2 frames at full extension, and retract to guard within about 8 frames with outCubic.
+
   Lesson: the user preferred the **crisper hit-key stop and recoil** over the fully smooth bell-shaped drive. "Snap" complaints were about the arm twist, not about the hit being a hard stop. Don't smooth away the impact accent in future strikes. Cross game-speed peak with the flare is 2.5k (jab 3.2k); offer to sharpen if it reads soft.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
