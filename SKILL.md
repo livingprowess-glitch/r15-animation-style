@@ -256,6 +256,15 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Rule: when a bent-arm strike needs more forward reach, move the body, not the arm.
 - (2026-10-14, user) **"The lead hook should follow the same principle as the jab and cross for the smoothing between full extension and pull-back."** The hook's follow-through key (hit+6) now eases out with inOutSine, and guard moved to **hit+18** (from an outCubic snap with guard at hit+16). The return is a 12-frame bell peaking at about 0.08 studs/frame, and the elbow unwinds at ≤11°/frame. **House rule for every strike: hold until hit+6, then inOutSine back to guard at hit+18.**
 - Bridge note: run every write through `rbxrun.sh`. A plain rbx.ps1 run can land on the wrong DataModel, return nothing and change nothing. Always verify with a separate request.
+- (2026-10-14) **`Boxing_RearHook_Orthodox`** (`work/mkrhook.js`, with body and hand JSON in `work/rhook_body.json` and `work/rhook_hand.json`; 78 frames, `Hit` f27, end f77).
+  - Built as a mirror of the lead hook, using the cross's rotation direction (root yaw positive).
+  - **Wind-up:** root -34, waist +4, neck +26, weight 63% rear; elbow flare pole (0.8, 0.45, 0.25), so the elbow ends 0.56 above the shoulder; chamber local (0.934, 1.303, -1.094), 1.30 from the shoulder.
+  - **Impact:** root +28, waist +20 (chest about +48), neck -46; hips forward z 0.22, sink -0.30. First pass at chest +32 left the arm too straight (1.75–2.0).
+  - **Targets:** impact 1.85 ahead of the head on the centre line, local (1.409, 1.269, -1.391), 1.61 from the shoulder. Follow-through at hit+6 (root +36, waist +24, neck -58) carries 0.5 past centre to the lead side, local (1.097, 1.295, -1.334).
+  - **Rear foot:** pivots yaw -35 → 0, pitch -30. The 0.52 "slide" reading is the pivot.
+  - **Weight:** 22% rear at impact (committed, like the cross). Lead knee 156–164°.
+  - **Speed:** drives through with inQuad loads, fist 1.15 studs/frame at impact; house return hold to hit+6 then inOutSine to guard at hit+18; roll ≤13°/frame.
+- (2026-10-14) The user renamed (or accidentally blanked) the lead hook gallery rig to " ". Find gallery rigs by their `Animation` attribute, never by name.
 - (2026-10-14) **Closing an editor tab can write its old text back.** The jab and cross were open in tabs. My forced `.Source` write matched, but when the user closed the tabs, the stale tab text replaced it (the jab came back with the pre-fix -40/-8 turn).
   - Rule: after the user closes tabs, **re-install and verify from a separate bridge request**, by exact source comparison against the local file. Then rebuild the `AnimSaves` copies from the verified modules.
   - The place is a Team Create place ("animation workshop"). Writes made after the tabs closed persisted across requests.

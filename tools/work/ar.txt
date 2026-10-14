@@ -1,0 +1,1 @@
+Workspace.AnimGallery.Boxing Rear Hook added at 18.971105575561523, 0.6041693687438965, 13.041034698486328 | plays Boxing_RearHook_Orthodox over Boxing_Idle_Orthodox | Workspace.AnimGallery.Boxing Rear Hook.AnimSaves.Boxing_RearHook_Orthodox 78 keyframes

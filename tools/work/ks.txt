@@ -1,0 +1,2 @@
+Workspace.KiaiRig.AnimSaves.Boxing_LeadHook_Orthodox | 78 keyframes
+Workspace.AnimGallery.Boxing Lead Hook.AnimSaves.Boxing_LeadHook_Orthodox | 78 keyframes

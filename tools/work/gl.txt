@@ -1,0 +1,6 @@
+5 children:
+"Boxing Cross" [Model] Animation=Boxing_Cross_Orthodox Base=Boxing_Idle_Orthodox pos=2.9711055755615234, 0.6041717529296875, 13.041027069091797
+"Boxing Idle" [Model] Animation=Boxing_Idle_Orthodox Base=nil pos=-13.028894424438477, 0.6041736602783203, 13.041019439697266
+" " [Model] Animation=Boxing_LeadHook_Orthodox Base=Boxing_Idle_Orthodox pos=10.971105575561523, 0.604170560836792, 13.041030883789062
+"Boxing Jab" [Model] Animation=Boxing_Jab_Orthodox Base=Boxing_Idle_Orthodox pos=-5.028894424438477, 0.6041727066040039, 13.041023254394531
+"Boxing Rear Hook" [Model] Animation=Boxing_RearHook_Orthodox Base=Boxing_Idle_Orthodox pos=18.971105575561523, 0.6041693687438965, 13.041034698486328
