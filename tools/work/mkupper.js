@@ -45,6 +45,12 @@ const rearPivot = (f, yaw, pitch, ease) => {
 	return { f, pos: [+(rearBall[0] - r * d[0]).toFixed(3), +(-2.929 + 0.5 * Math.sin(Math.abs(pitch) * D)).toFixed(3), +(rearBall[1] - r * d[2]).toFixed(3)], pole: d.map(v => +v.toFixed(3)), yaw, pitch, ease };
 };
 const leadIdle = (f, ease) => ({ f, pos: [-0.52, -2.89, -0.55], pole: [0, 0, -1], yaw: 3, pitch: -4, ease });
+const ld0 = dir(3);
+const leadBall = [-0.52 + BALL * Math.cos(-4 * D) * ld0[0], -0.55 + BALL * Math.cos(-4 * D) * ld0[2]];
+const leadHeel = (f, pitch, ease) => {
+	const d = dir(3), r = BALL * Math.cos(pitch * D);
+	return { f, pos: [+(leadBall[0] - r * d[0]).toFixed(3), +(-2.929 + 0.5 * Math.sin(Math.abs(pitch) * D)).toFixed(3), +(leadBall[1] - r * d[2]).toFixed(3)], pole: [0, 0, -1], yaw: 3, pitch, ease };
+};
 const L = (f, pos, ease, pole = [-0.5, -1, 0.1]) => ({ f, pos, pole, ease });
 const R = (f, pos, ease, pole = [0.5, -1, 0.1]) => ({ f, pos, pole, ease });
 const spec = {
@@ -72,18 +78,25 @@ const spec = {
 			{ f: 0, pole: [0.5, -1, 0.1], ease: "inOutSine" },
 			{ f: K.load, pole: [0.6, -1, 0.25], ease: "inQuad" },
 			{ f: K.hit, pole: [0.35, -1, 0.15], ease: "linear" },
-			{ f: K.hit + 6, pole: [0.35, -1, 0.1], ease: "inOutSine" },
+			{ f: K.hit + 6, pole: [0.4, -1, -0.25], ease: "inOutSine" },
 			{ f: K.hit + 18, pole: [0.5, -1, 0.1], ease: "linear" },
 			{ f: K.end, pole: [0.5, -1, 0.1], ease: "linear" },
 		],
 	},
 	legs: {
-		Left: [leadIdle(0, "linear"), leadIdle(K.end, "linear")],
+		Left: [
+			leadIdle(0, "inOutSine"),
+			leadIdle(K.load, "inQuad"),
+			leadHeel(K.hit, -10, "outQuad"),
+			leadHeel(K.over, -22, "inOutSine"),
+			leadIdle(K.end - 10, "linear"),
+			leadIdle(K.end, "linear"),
+		],
 		Right: [
 			rearIdle(0, "inOutSine"),
 			rearIdle(K.load - 3, "inQuad"),
-			rearPivot(K.hit, -12, -26, "outQuad"),
-			rearPivot(K.over, -14, -26, "inOutSine"),
+			rearPivot(K.hit, -8, -34, "outQuad"),
+			Object.assign(rearPivot(K.over, -4, -45, "inOutSine"), { pole: [-0.25, 0, -1] }),
 			rearIdle(K.end - 20, "linear"),
 			rearIdle(K.end, "linear"),
 		],

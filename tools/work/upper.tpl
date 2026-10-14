@@ -1,23 +1,23 @@
 const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
-		{ 22, -6, -32, -5, "inQuad", 0.05, -0.36, 0.46 },
-		{ 27, -4, 14, 3, "outQuad", -0.02, -0.27, 0.36 },
-		{ 33, -2, 20, 3, "inOutSine", -0.03, -0.26, 0.35 },
+		{ 22, -12, -34, -8, "inQuad", 0.06, -0.52, 0.5 },
+		{ 27, -2, 16, 4, "outQuad", -0.02, -0.25, 0.32 },
+		{ 33, 6, 30, 6, "inOutSine", -0.04, -0.12, 0.26 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
 		{ 0, -4, 9, -1, "inOutSine" },
-		{ 22, -8, 2, -6, "inQuad" },
-		{ 27, -4, 16, 3, "outQuad" },
-		{ 33, -2, 18, 3, "inOutSine" },
+		{ 22, -10, 0, -10, "inQuad" },
+		{ 27, -2, 18, 4, "outQuad" },
+		{ 33, 8, 22, 5, "inOutSine" },
 		{ LAST_FRAME, -4, 9, -1, "linear" },
 	},
 	Head = {
 		{ 0, -7, 15, 0.5, "inOutSine" },
-		{ 22, -8, 26, 4, "inQuad" },
-		{ 27, -10, -28, -1, "outQuad" },
-		{ 33, -12, -36, -1, "inOutSine" },
+		{ 22, -4, 30, 6, "inQuad" },
+		{ 27, -10, -32, -1, "outQuad" },
+		{ 33, -14, -48, -2, "inOutSine" },
 		{ LAST_FRAME, -7, 15, 0.5, "linear" },
 	},
 	LeftUpperArm = {

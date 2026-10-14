@@ -289,3 +289,11 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - The waist and head move under 1°. Only the arms breathe a few degrees.
   - No flicks, bounces, pumps or weight rocking.
 - (2026-10-14) **Foot yaw sign:** in ikbake, yaw follows Ry. Negative yaw turns the toes to the character's RIGHT, positive to the LEFT. A turned-out rear right foot is therefore NEGATIVE yaw. The Kamehameha v2 right foot used +20, which turns it in.
+- (2026-10-14, user review of uppercut v1, with pose reference) **"Dip should be more exaggerated, follow-through more exaggerated, legs too stiff, follow-through should bring the rear arm forward more."** v2 (`work/mkupper.js`, frames unchanged: load f22, Hit f27, over f33, end f77):
+  - **Dip:** hips drop to y -0.52 at load (was about -0.36), the waist leans forward -10 and tilts toward the punch side, and 61% of the weight loads onto the rear leg. Rear knee 83° at the bottom.
+  - **Rise:** hips come up to -0.12 at f33, so the body stands tall through the follow-through; the chest opens up (waist +8 X at over).
+  - **Rear leg drive:** the heel peels up (pitch -34 at hit, -45 at over) on the ball pivot, with the knee pole turned to (-0.25, 0, -1) so the knee crosses forward under the body.
+  - **Lead leg:** the heel lifts slightly (pitch -10 → -22) instead of staying flat; it settles back by K.end-10, because returning it by K.end-20 left the ankle 0.01 out of reach.
+  - **Follow-through:** the rear fist ends at torso space (1.41, 1.62, -1.23), up past the head and forward, not just straight up.
+  - **Chamber:** at torso z -1.29 the forearm clears the chest (v1 clipped at -1.16).
+  - Rule: for uppercuts, the drama is in the vertical. Pair a deep load with a tall rise, and drive the rear heel and knee, rather than adding more turn.
