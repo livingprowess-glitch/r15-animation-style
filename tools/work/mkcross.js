@@ -1,6 +1,6 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 15, hit: 20, over: 24, back: 38, settle: 38, end: 74 };
+const K = { load: 15, hit: 20, over: 26, back: 38, settle: 38, end: 74 };
 
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
@@ -53,8 +53,8 @@ const spec = {
 			R(0, [0.62, 1.1, -1.06], "inOutSine"),
 			R(K.load, [0.72, 0.98, -0.9], "outQuad"),
 			R(K.hit, [1.466, 1.41, -1.481], "outQuad", [0.6, -1, 0.1]),
-			R(K.hit + 2, [1.56, 1.459, -1.418], "outCubic", [0.6, -1, 0.1]),
-			R(K.hit + 10, [0.62, 1.1, -1.06], "linear"),
+			R(K.hit + 6, [1.56, 1.459, -1.418], "outCubic", [0.6, -1, 0.1]),
+			R(K.hit + 14, [0.62, 1.1, -1.06], "linear"),
 			R(K.end, [0.62, 1.1, -1.06], "linear"),
 		],
 	},
@@ -77,8 +77,8 @@ spec.poles = {
 		{ f: 0, pole: [0.5, -1, 0.1], ease: "inOutSine" },
 		{ f: K.load, pole: [1, -0.35, 0.1], ease: "inOutSine" },
 		{ f: K.hit, pole: [0.6, -1, 0.1], ease: "linear" },
-		{ f: K.hit + 2, pole: [0.6, -1, 0.1], ease: "outCubic" },
-		{ f: K.hit + 10, pole: [0.5, -1, 0.1], ease: "linear" },
+		{ f: K.hit + 6, pole: [0.6, -1, 0.1], ease: "outCubic" },
+		{ f: K.hit + 14, pole: [0.5, -1, 0.1], ease: "linear" },
 		{ f: K.end, pole: [0.5, -1, 0.1], ease: "linear" },
 	],
 };

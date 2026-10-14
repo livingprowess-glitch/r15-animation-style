@@ -1,6 +1,6 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 15, hit: 20, over: 24, back: 36, settle: 36, end: 68 };
+const K = { load: 15, hit: 20, over: 26, back: 36, settle: 36, end: 68 };
 const hand = JSON.parse(process.argv[2] || "null") || { hit: [-1.144, 1.178, -1.653], over: [-1.06, 1.16, -1.62] };
 
 const tpl = `const TRACKS: { [string]: { Key } } = {
@@ -46,8 +46,8 @@ const spec = {
 			L(0, [-0.74, 1.14, -1.14], "inOutSine"),
 			L(K.load, [-0.68, 1.04, -0.98], "outQuad"),
 			L(K.hit, hand.hit, "outQuad", [-0.6, -1, 0.1]),
-			L(K.hit + 2, hand.over, "outCubic", [-0.6, -1, 0.1]),
-			L(K.hit + 10, [-0.74, 1.14, -1.14], "linear"),
+			L(K.hit + 6, hand.over, "outCubic", [-0.6, -1, 0.1]),
+			L(K.hit + 14, [-0.74, 1.14, -1.14], "linear"),
 			L(K.end, [-0.74, 1.14, -1.14], "linear"),
 		],
 		Right: [

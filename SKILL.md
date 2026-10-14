@@ -229,6 +229,14 @@ Append each user correction here as a rule: what was wrong, which joint, and the
     - **Wind-up:** load pole (-0.8, 0.45, 0.25), so the elbow ends 0.32 **above** the shoulder and swings well out. The chamber glove sits at local (-1.421, 1.367, -0.801), cheek height, out and back. The wind-up also opens the chest more (root -10, waist +13).
     - **Reach:** the impact target is 1.85 ahead of the head (was 1.6), giving shoulder-to-fist 1.58 (a wider hook). The fist peaks at 0.74 studs/frame (was 0.55).
     - Balance (40% → 60% rear) and the smooth elbow drop are unchanged.
+- (2026-10-14, user) **"Hold the jab and cross extension a bit longer."** The hold is now 6 frames: the arm hold key moved to hit+6 and the guard to hit+14, and the body's over key moved to hit+6 (f26) so the torso holds too. The cross's poles moved to the same frames. The retract speed is unchanged. This supersedes the earlier "hold at most ~2 frames" rule: the user wants about 6 frames.
+- (2026-10-14, user) **"The hook should follow through more."**
+  - The body keeps turning after impact: over key at hit+6 (f33), root -56, waist -11, neck +60, lead pivot -48/-26.
+  - The fist carries 0.6 past the centre line (follow-through target head + (0.6, -0.5, -1.6), local (-1.258, 1.163, -1.33)) and holds the bent shape (1.47 from the shoulder) until hit+6. It retracts to guard by hit+16, and the elbow drops over hit+6 → hit+18.
+  - **Drive through impact:** the load keys (body, hand, pole) use `inQuad`, so the swing accelerates into the hit (fist 0.96/frame at impact) and decelerates through the follow-through. With outQuad into the hit the fist stalled at impact (0.11) and then re-accelerated, a stutter.
+  - Hooks drive through; the jab and cross keep their crisp stop at the hit.
+  - Weight goes 60% → 67% rear through the follow-through.
+- (2026-10-14) **Installing into scripts open in a Studio editor tab:** `UpdateSourceAsync` returned ok, but `.Source` stayed old (jab and cross were open in tabs). Always verify `m.Source == src` after writing and fall back to `m.Source = src`. The install scripts now report `open in editor`.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
