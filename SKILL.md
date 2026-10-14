@@ -18,6 +18,7 @@ The user doesn't want a new Script for every animation. Deliver each animation a
 
 ## MANDATE: no snapping pullbacks (applies to every strike and every return, not only hit-to-guard)
 The user has rejected the same artifact three times (jab, cross, uppercut v3): a limb fully extended on one frame and tucked back a few frames later. Every pullback, recovery, retract or return-to-guard of any limb must be slow and continuous.
+- **Enforced by `lint.js`** (see the next section).
 - **Measure, don't eyeball.** After every bake, dump every frame (`node mkrender.js <bundle> $(seq -s, 0 <lastFrame>)`, then `rbxrun.sh posedump_run.lua`) and run `node handspeed.js <posedump.json> <Left|Right> <hitFrame>` for each striking hand (and for a foot on kicks, after changing the part name).
 - **Limits** (hard gate, same as a limb ERROR, so never install past them): pullback peak speed ≤ 45% of the strike's peak, and no more than 0.6 studs of hand travel in any 4 consecutive frames after hit+2.
 - **How to meet them:**
@@ -26,6 +27,34 @@ The user has rejected the same artifact three times (jab, cross, uppercut v3): a
   - Use a path key midway with eases that keep the speed continuous (`inQuad` out of the hold, `outQuad` out of the midpoint). Two inOutSine segments stop dead at the midpoint, and a single short inOutSine bunches 70% of the travel into its middle third.
   - Scale the retract to the distance: a bigger extension (uppercut follow-through) needs a longer return than a jab.
 - Report the handspeed line with every strike delivery.
+
+## Gate before every install: `lint.js` + onion view (since 2026-10-14)
+Run from `tools/` after `script2data.js` has written the data module to `anim_reader/Animations`:
+```
+node lint.js <AnimationName> --speed 1.765 --onion
+```
+It bundles the module as it is on disk, runs everything against a fresh rig in Studio (about 15 s) and prints one table. It **exits 1 on any FAIL; never install while it fails**, and explain every WARN in the report.
+
+| Gate | FAIL | WARN |
+|---|---|---|
+| limbs / floor / slide (limbcheck) | any limb ERROR | limb WARN |
+| loop closes (loops) / chains from the idle (Boxing_* one-shots default to `Boxing_Idle_Orthodox`; `--chain X` / `--no-chain`) | f0 or last frame off by > 0.005 | |
+| balance | centre of mass leaves the feet | weight outside 10–90% rear |
+| knees follow toes / locked | knee more than 25° off its toes | > 12°, or a knee at 178°+ |
+| arm twist per frame | > 50° | > 30° |
+| pullback snap, every hand and foot after hit+2 | > 0.6 studs in any 4 frames, or the striking limb's pullback peak > 45% of its strike peak | |
+| hit frame distinct from same-prefix strikes | | shared Hit frame |
+
+- The striking limb is the hand farthest from the chest at `Hit`; pass `--strike RightFoot` for kicks.
+- `--speed` adds the travel per 4 *game* frames as information (not gated).
+- The pose dump lands at `work/lint_<name>.json`.
+
+`--onion` (or `node onion.js <posedump.json> <out.png> <hit> [every]`) writes `work/onion_<name>.png`, **the one image to look at for motion**:
+- side, front and top panels with ghosted poses every 4 frames (blue before the hit, orange after) and the hit pose solid;
+- per-frame trails of both hands and feet: dot spacing is speed, frame numbers every 10, red segments are snaps;
+- a spacing chart (studs per frame per extremity) with the hit marked and the snap limit dashed.
+
+Read arcs (smooth curves, not kinks or zig-zags), spacing (dots bunching into a hold, then spreading out evenly) and the guard hand's behaviour from it before reporting.
 
 ## Workflow
 1. **Check the place.** Run `rbx.ps1 -Op status` first (see the rbxbridge memory). Guard every write with a place check.
@@ -326,3 +355,8 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Cross FAILED:** 0.71 studs in 4 frames at f29–33. Its return ran hit+6 → hit+18 (12 frames inOutSine). Fixed to hit+6 → hit+26 (the guard pole key moved with it): now 0.43 per 4 frames, peaking at 13% of the strike. Limb check clean, no arm roll (≤3°/frame).
   - **Passed:** jab 0.47 (its return is shorter because the lead hand travels less), lead hook 0.31, rear hook 0.31, uppercut v4 0.49. Every guard hand is at ≤0.29.
   - Rule of thumb: a straight rear-hand return of about 1.7 studs needs about 20 frames. The old "back to guard by hit+18" default is only safe for the lead jab.
+- (2026-10-14) **Built `lint.js` + `onion.js`** and ran them on the whole boxing set. All six pass. Remaining WARNs:
+  - the jab and cross share Hit f20, and the hooks share f27 (the user has only asked for the uppercut to differ so far);
+  - the lead hook's left knee is 15° off its toes at f23, during its pivot.
+
+  The onion views show the guard hand whipping at about 1.2 studs/frame through the uppercut's hit. That isn't a snap: the 74° torso turn carries it, and it's visible as the orange arc in the top view. Lint traps found while building it: the old legcheck toe-yaw readout is flipped 180° (posemetrics corrects it), and world-space speed can't identify the striking hand because a body turn moves the guard hand just as fast, so use the distance from the chest at Hit.
