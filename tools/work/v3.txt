@@ -1,0 +1,3 @@
+Boxing_Jab_Orthodox: exact match with latest build = true | open in editor = false | 27595 chars | Hit f20 | last f68 | 69 keyframes build
+Boxing_Cross_Orthodox: exact match with latest build = true | open in editor = false | 30006 chars | Hit f20 | last f74 | 75 keyframes build
+Boxing_LeadHook_Orthodox: exact match with latest build = true | open in editor = false | 31274 chars | Hit f27 | last f77 | 78 keyframes build

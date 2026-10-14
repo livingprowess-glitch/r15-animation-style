@@ -7,8 +7,8 @@ const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
 		{ ${K.load}, -3, -10, 5, "inQuad", -0.06, -0.24, 0.44 },
-		{ ${K.hit}, -4, -42, -2, "outQuad", 0.03, -0.25, 0.4 },
-		{ ${K.over}, -5, -56, -3, "inOutSine", 0.04, -0.26, 0.38 },
+		{ ${K.hit}, -5, -42, -2, "outQuad", 0.03, -0.27, 0.2 },
+		{ ${K.over}, -6, -56, -3, "inOutSine", 0.04, -0.28, 0.18 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {

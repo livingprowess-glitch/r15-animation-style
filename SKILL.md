@@ -250,6 +250,10 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Jab:** the chest turn was cut (impact root -33, waist 0; neck +33).
   - **Return:** hold until hit+6, then guard at **hit+18 with inOutSine**, a 12-frame bell peaking at about 0.12 (jab) and 0.19 (cross) studs/frame. The user rejected both the 5-frame snap and the old 7-frame stall plus drift.
   - Game-speed peaks dropped (jab 2.4k, cross 2.7k): the arm unfolds instead of swinging.
+- (2026-10-14, user) **"Bring the lead hook forward a bit."** The arm alone had no room: pushing the target to 2.0 ahead of the head straightens it to 1.70, and it stops reading as a hook.
+  - Fix: the **hips drive forward**, root z at hit/over 0.40/0.38 → 0.20/0.18 with a slightly deeper sink (-0.27/-0.28). The arm targets were re-picked to keep shoulder-to-fist at about 1.59 (impact) and 1.55 (follow-through): local hit (-1.346, 1.163, -1.44), hold (-1.367, 1.203, -1.369).
+  - Result: the fist lands 0.24 further forward in world space at impact and 0.35 further through the follow-through. Rear weight at impact 54% (was 60%), lead knee 112°.
+  - Rule: when a bent-arm strike needs more forward reach, move the body, not the arm.
 - (2026-10-14) **Closing an editor tab can write its old text back.** The jab and cross were open in tabs. My forced `.Source` write matched, but when the user closed the tabs, the stale tab text replaced it (the jab came back with the pre-fix -40/-8 turn).
   - Rule: after the user closes tabs, **re-install and verify from a separate bridge request**, by exact source comparison against the local file. Then rebuild the `AnimSaves` copies from the verified modules.
   - The place is a Team Create place ("animation workshop"). Writes made after the tabs closed persisted across requests.
