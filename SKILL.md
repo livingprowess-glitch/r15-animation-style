@@ -250,6 +250,9 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Jab:** the chest turn was cut (impact root -33, waist 0; neck +33).
   - **Return:** hold until hit+6, then guard at **hit+18 with inOutSine**, a 12-frame bell peaking at about 0.12 (jab) and 0.19 (cross) studs/frame. The user rejected both the 5-frame snap and the old 7-frame stall plus drift.
   - Game-speed peaks dropped (jab 2.4k, cross 2.7k): the arm unfolds instead of swinging.
+- (2026-10-14) **Closing an editor tab can write its old text back.** The jab and cross were open in tabs. My forced `.Source` write matched, but when the user closed the tabs, the stale tab text replaced it (the jab came back with the pre-fix -40/-8 turn).
+  - Rule: after the user closes tabs, **re-install and verify from a separate bridge request**, by exact source comparison against the local file. Then rebuild the `AnimSaves` copies from the verified modules.
+  - The place is a Team Create place ("animation workshop"). Writes made after the tabs closed persisted across requests.
 - (2026-10-14) **Installing into scripts open in a Studio editor tab:** `UpdateSourceAsync` returned ok, but `.Source` stayed old (jab and cross were open in tabs). Always verify `m.Source == src` after writing and fall back to `m.Source = src`. The install scripts now report `open in editor`.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**

@@ -1,2 +1,2 @@
-Boxing_Jab_Orthodox updateAsync ok=true | open in editor=true | match true | Hit f20 | last f68
-Boxing_Cross_Orthodox updateAsync ok=true | open in editor=true | match true | Hit f20 | last f74
+Boxing_Jab_Orthodox updateAsync ok=true | open in editor=false | match true | Hit f20 | last f68
+Boxing_Cross_Orthodox updateAsync ok=true | open in editor=false | match true | Hit f20 | last f74
