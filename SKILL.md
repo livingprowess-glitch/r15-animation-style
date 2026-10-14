@@ -209,6 +209,13 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Result: a 2-frame hold, then a 0.30 studs/frame snap-back decelerating into guard by about f28, with gradual elbow unwinding. Game-speed peaks are jab 3.5k, cross 4.6k.
   - Rule: **a punch returns nearly as fast as it lands.** Hold at most about 2 frames at full extension, and retract to guard within about 8 frames with outCubic.
 
+  Follow-up (user): **"Improve the extension on the jab and cross; poor, lacking range."**
+  - Measured: both arms were already at full length (1.76 of 1.79) at impact, so range has to come from the body. Fist travel from guard was jab 1.28 and cross about 1.75.
+  - **Jab:** a lead-foot step of 0.35 forward (lift ≥0.18 so it reads as a step, not a shuffle), landing at hit-1, held through the punch, stepping back over hit+12 to hit+20. Hips drive forward to z 0.03–0.05.
+  - **Cross:** more hip turn (+26/+29 against +18/+22), more chest turn (+22/+24), neck counter -46/-52, hips forward to z 0.10, sink -0.33. The lean stays at the original root -7 / waist -10.
+  - Result: jab travel 1.55, cross 2.04, both re-aimed onto the chin line with aim.js.
+  - Balance: a deeper lean (-9/-13) pushed the cross to 11% on the rear foot, nearly tipping, so it was rolled back. **Range comes from rotation and steps, not lean.** The cross sits at 15–16% rear (committed); the jab at 38%.
+
   Lesson: the user preferred the **crisper hit-key stop and recoil** over the fully smooth bell-shaped drive. "Snap" complaints were about the arm twist, not about the hit being a hard stop. Don't smooth away the impact accent in future strikes. Cross game-speed peak with the flare is 2.5k (jab 3.2k); offer to sharpen if it reads soft.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**

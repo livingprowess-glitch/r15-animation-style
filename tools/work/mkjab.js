@@ -7,8 +7,8 @@ const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
 		{ ${K.load}, 0, -18, 1.5, "linear", 0.03, -0.22, 0.48 },
-		{ ${K.hit}, -6, -40, -1, "outQuad", 0, -0.26, 0.28 },
-		{ ${K.over}, -7, -43, -1, "inOutSine", 0, -0.26, 0.27 },
+		{ ${K.hit}, -6, -40, -1, "outQuad", 0, -0.3, 0.05 },
+		{ ${K.over}, -7, -43, -1, "inOutSine", 0, -0.3, 0.03 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
@@ -62,6 +62,12 @@ const spec = {
 	legs: {
 		Left: [
 			{ f: 0, pos: [-0.52, -2.89, -0.55], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "linear" },
+			{ f: K.load, pos: [-0.52, -2.89, -0.55], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "outQuad" },
+			{ f: K.load + 2, pos: [-0.53, -2.71, -0.74], pole: [0, 0, -1], yaw: 3, pitch: 2, ease: "inQuad" },
+			{ f: K.hit - 1, pos: [-0.54, -2.89, -0.9], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "linear" },
+			{ f: K.hit + 12, pos: [-0.54, -2.89, -0.9], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "outQuad" },
+			{ f: K.hit + 16, pos: [-0.53, -2.72, -0.72], pole: [0, 0, -1], yaw: 3, pitch: 0, ease: "inQuad" },
+			{ f: K.hit + 20, pos: [-0.52, -2.89, -0.55], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "linear" },
 			{ f: K.end, pos: [-0.52, -2.89, -0.55], pole: [0, 0, -1], yaw: 3, pitch: -4, ease: "linear" },
 		],
 		Right: [
