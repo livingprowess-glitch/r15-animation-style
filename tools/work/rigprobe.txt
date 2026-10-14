@@ -1,0 +1,31 @@
+Place2
+Workspace.KiaiRig.Humanoid.Animator [Animator]
+Workspace.KiaiRig.Animate [LocalScript] enabled=true
+Workspace.KiaiRig.Animate.toolslash.ToolSlashAnim [Animation] http://www.roblox.com/asset/?id=522635514
+Workspace.KiaiRig.Animate.toolnone.ToolNoneAnim [Animation] http://www.roblox.com/asset/?id=507768375
+Workspace.KiaiRig.Animate.toollunge.ToolLungeAnim [Animation] http://www.roblox.com/asset/?id=522638767
+Workspace.KiaiRig.Animate.sit.SitAnim [Animation] http://www.roblox.com/asset/?id=2506281703
+Workspace.KiaiRig.Animate.point.PointAnim [Animation] http://www.roblox.com/asset/?id=507770453
+Workspace.KiaiRig.Animate.laugh.LaughAnim [Animation] http://www.roblox.com/asset/?id=507770818
+Workspace.KiaiRig.Animate.jump.JumpAnim [Animation] http://www.roblox.com/asset/?id=507765000
+Workspace.KiaiRig.Animate.idle.Animation1 [Animation] http://www.roblox.com/asset/?id=507766388
+Workspace.KiaiRig.Animate.idle.Animation2 [Animation] http://www.roblox.com/asset/?id=507766666
+Workspace.KiaiRig.Animate.fall.FallAnim [Animation] http://www.roblox.com/asset/?id=507767968
+Workspace.KiaiRig.Animate.dance3.Animation2 [Animation] http://www.roblox.com/asset/?id=507777451
+Workspace.KiaiRig.Animate.dance3.Animation1 [Animation] http://www.roblox.com/asset/?id=507777268
+Workspace.KiaiRig.Animate.dance3.Animation3 [Animation] http://www.roblox.com/asset/?id=507777623
+Workspace.KiaiRig.Animate.dance2.Animation1 [Animation] http://www.roblox.com/asset/?id=507776043
+Workspace.KiaiRig.Animate.dance2.Animation2 [Animation] http://www.roblox.com/asset/?id=507776720
+Workspace.KiaiRig.Animate.dance2.Animation3 [Animation] http://www.roblox.com/asset/?id=507776879
+Workspace.KiaiRig.Animate.dance.Animation1 [Animation] http://www.roblox.com/asset/?id=507771019
+Workspace.KiaiRig.Animate.dance.Animation2 [Animation] http://www.roblox.com/asset/?id=507771955
+Workspace.KiaiRig.Animate.dance.Animation3 [Animation] http://www.roblox.com/asset/?id=507772104
+Workspace.KiaiRig.Animate.climb.ClimbAnim [Animation] http://www.roblox.com/asset/?id=507765644
+Workspace.KiaiRig.Animate.cheer.CheerAnim [Animation] http://www.roblox.com/asset/?id=507770677
+Workspace.KiaiRig.Animate.mood.Animation1 [Animation] http://www.roblox.com/asset/?id=14366558676
+Workspace.KiaiRig.Animate.walk.WalkAnim [Animation] http://www.roblox.com/asset/?id=913402848
+Workspace.KiaiRig.Animate.swimidle.SwimIdle [Animation] http://www.roblox.com/asset/?id=913389285
+Workspace.KiaiRig.Animate.swim.Swim [Animation] http://www.roblox.com/asset/?id=913384386
+Workspace.KiaiRig.Animate.run.RunAnim [Animation] http://www.roblox.com/asset/?id=913376220
+Workspace.KiaiRig.Animate.wave.WaveAnim [Animation] http://www.roblox.com/asset/?id=507770239
+SSS.AnimPreview enabled=true

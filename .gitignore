@@ -1,0 +1,10 @@
+tools/work/*.json
+tools/work/*.png
+tools/work/*.server.lua
+tools/work/*_tracks.lua
+tools/check.lua
+tools/verify.lua
+tools/posedump_run.lua
+tools/gen.json
+tools/corpus_one.lua
+tools/calib.txt

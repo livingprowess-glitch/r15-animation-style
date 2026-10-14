@@ -1,0 +1,1 @@
+name=animation workshop | placeId=103523105713230 | AnimReader=true | boxing=40039 | KiaiRig=true | AnimPreview=true | animation_rigs=false

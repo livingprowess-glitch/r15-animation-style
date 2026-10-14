@@ -1,0 +1,25 @@
+const fs=require("fs");const {analyze,JOINTS,MOTOR,mean,median,std}=require("./analyze.js");
+const file=process.argv[2]||"corpus.json";
+const all=JSON.parse(fs.readFileSync(file,"utf8"));const seen=new Set();const C=[];
+for(const s of all){const h=JSON.stringify(s.kfs);if(seen.has(h))continue;seen.add(h);if(!/Whole/i.test(s.name))C.push(s);}
+const R=C.map(analyze);const f1=x=>(Math.round(x*10)/10).toFixed(1);
+const active=JOINTS.filter(j=>!/Hand/.test(j));
+const pop=R.filter(r=>r.peakFrame<=1);
+console.log("first-frame pop anims:",pop.length,"/",R.length, pop.map(r=>r.name.trim()).join(", "));
+const firstStep=R.map(r=>Math.max(...active.map(j=>r.joint[j].eul?0:0)));
+const meanJointPeak=R.map(r=>mean(active.map(j=>r.joint[j].peakVel)));
+console.log("mean per-joint peak (13 active) per anim: mean",f1(mean(meanJointPeak)),"median",f1(median(meanJointPeak)));
+const segRate=R.map(r=>{const tot=Object.values(r.easing).reduce((a,b)=>a+b,0);return tot/active.length/r.dur;});
+console.log("fitted moves per joint per sec: mean",f1(mean(segRate)),"median",f1(median(segRate)));
+const action=R.filter(r=>!r.loops);
+console.log("non-loop anims",action.length,"loop",R.length-action.length);
+console.log("action-only: anticip frames mean",f1(mean(action.map(r=>r.anticipationFrames))),"median",median(action.map(r=>r.anticipationFrames)),"; to-peak mean",f1(mean(action.map(r=>r.timeToPeakFrames))),"; settle mean",f1(mean(action.map(r=>r.settleFrames))),"median",median(action.map(r=>r.settleFrames)));
+console.log("attacks with anticipation >0:",action.filter(r=>r.anticipationFrames>0).length);
+const anat={Neck:60,Waist:45,LShoulder:150,RShoulder:150,LElbow:145,RElbow:145,LHip:120,RHip:120,LKnee:140,RKnee:140,LAnkle:45,RAnkle:45};
+console.log("exaggeration (max dev / anatomical ROM):",Object.entries(anat).map(([m,lim])=>{const j=JOINTS.find(x=>MOTOR[x]==m);return m+" "+f1(Math.max(...R.map(r=>r.joint[j].maxDev))/lim*100)+"%";}).join(", "));
+console.log("frames over anatomical ROM %:",Object.entries(anat).map(([m,lim])=>{const j=JOINTS.find(x=>MOTOR[x]==m);let o=0,n=0;for(const r of R){for(const ax of [0]){} }return "";}).join(""));
+const vy=R.map(r=>r.rootRange[1]);console.log("root Y range non-loop mean",f1(mean(action.map(r=>r.rootRange[1]))));
+const ez={linear:0,"ease-in":0,"ease-out":0,"ease-in-out":0,overshoot:0};for(const r of action)for(const k in ez)ez[k]+=r.easing[k];const T=Object.values(ez).reduce((a,b)=>a+b,0);
+console.log("easing action-only:",Object.entries(ez).map(([k,v])=>k+" "+f1(v/T*100)).join(", "));
+console.log("dur action mean",f1(mean(action.map(r=>r.dur))),"loop disc action mean",f1(mean(action.map(r=>r.loopMax))),"loopMean",f1(mean(action.map(r=>r.loopMean))));
+console.log("peak action dom",f1(mean(action.map(r=>r.joint[r.domJoint].peakVel))));

@@ -1,0 +1,1 @@
+ReplicatedStorage.AnimReader.Animations.Boxing_Cross_Orthodox installed, match true, builds 75 keyframes, preview now Boxing_Cross_Orthodox

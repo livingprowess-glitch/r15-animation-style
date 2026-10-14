@@ -1,0 +1,44 @@
+Stun In air
+Upper cut in the Air stun
+Stun_One
+Stun_Two
+Free roam
+Downslam stun
+Stun_Three
+KnockBack
+Right-Weave
+Back-Weave
+Left-Weave
+Falling_Animation
+Down Kick
+Clorox Swim
+Eagle Kicks Landed Attacker
+Eagle Kicks Landed Victim
+Eagle Kicks miss
+Right Roll Animation
+Left Roll Animation
+Front Roll Animation
+Back Roll Animation
+Walking_Animation
+Running_Animation
+m2_Two
+m2_Three
+m2_Four
+m2_One
+Reworked_Combo_Two
+Reworked_Combo_Three
+Reworked_Combo_Four
+Reworked_Combo_One
+Parry_To_Block_Animation
+Idle_Animation
+Blocking_Animation
+Combo_animation_One
+Combo_animation_Two
+Combo_animation_Three
+Combo_animation_Four
+Spinning_Kick_Animation
+Uptilt
+Skill_One
+Crit_Animation
+UpperCut_Animation
+Jumping_Animation
