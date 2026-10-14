@@ -65,6 +65,50 @@ const sampleRoot = f => {
 	return rootBlock[rootBlock.length - 1].v;
 };
 
+const waistBlock = (() => {
+	const start = src.indexOf("\tUpperTorso = {\n");
+	if (start < 0) return [{ f: 0, v: [0, 0, 0], ease: "linear" }];
+	const end = src.indexOf("\n\t},", start);
+	return src.slice(start, end).split("\n").map(l => l.match(/\{\s*([^{}]+)\}/)).filter(Boolean)
+		.map(m => m[1].split(",").map(s => s.trim().replace(/"/g, "")))
+		.map(k => ({ f: k[0] === "LAST_FRAME" ? lastFrame : Number(k[0]), v: [1, 2, 3].map(i => Number(k[i] || 0)), ease: k[4] }));
+})();
+const sampleWaist = f => {
+	for (let i = 0; i < waistBlock.length - 1; i++) {
+		const a = waistBlock[i], b = waistBlock[i + 1];
+		if (f <= b.f) { const t = EASE[a.ease]((f - a.f) / (b.f - a.f)); return a.v.map((v, j) => v + (b.v[j] - v) * t); }
+	}
+	return waistBlock[waistBlock.length - 1].v;
+};
+// UpperTorso frame in HumanoidRootPart space at frame f
+const chestAt = f => {
+	const r = sampleRoot(f), w = sampleWaist(f);
+	const Rroot = euler(r[0], r[1], r[2]);
+	const ltPos = add(add([0, -1, 0], [r[3], r[4], r[5]]), mv(Rroot, scale(geo.LowerTorso.c1, -1)));
+	const Rw = euler(w[0], w[1], w[2]);
+	const R = mul(Rroot, Rw);
+	const pos = add(ltPos, mv(Rroot, add(geo.UpperTorso.c0, mv(Rw, scale(geo.UpperTorso.c1, -1)))));
+	return { R, pos };
+};
+// arm keys may set "world": true -> pos is HumanoidRootPart space; segments touching a world key travel in a straight world line
+const sampleArm = (keys, f) => {
+	const toWorld = k => { if (k.world) return k.pos; const c = chestAt(k.f); return add(c.pos, mv(c.R, k.pos)); };
+	const toLocal = p => { const c = chestAt(f); return mv(tr(c.R), sub(p, c.pos)); };
+	if (f <= keys[0].f) return { pos: keys[0].world ? toLocal(keys[0].pos) : keys[0].pos, pole: keys[0].pole };
+	for (let i = 0; i < keys.length - 1; i++) {
+		const a = keys[i], b = keys[i + 1];
+		if (f <= b.f) {
+			const t = EASE[a.ease || "linear"]((f - a.f) / (b.f - a.f));
+			const pole = a.pole.map((v, j) => v + (b.pole[j] - v) * t);
+			if (!a.world && !b.world) return { pos: a.pos.map((v, j) => v + (b.pos[j] - v) * t), pole };
+			const A = toWorld(a), B = toWorld(b);
+			return { pos: toLocal(A.map((v, j) => v + (B[j] - v) * t)), pole };
+		}
+	}
+	const last = keys[keys.length - 1];
+	return { pos: last.world ? toLocal(last.pos) : last.pos, pole: last.pole };
+};
+
 // two-bone solve in the parent space: S pivot, T target, u upper bone, b lower length, bendSign +1 elbow / -1 knee
 function twoBone(S, T, u, b, bendSign, pole, ref) {
 	const Dist = len(sub(T, S));
@@ -85,7 +129,7 @@ const push = (name, f, xyz) => { (out[name] = out[name] || []).push({ f, xyz });
 const warnings = [];
 for (let f = 0; f <= lastFrame; f++) {
 	for (const side of Object.keys(ik.arms || {})) {
-		const g = sampleTargets(ik.arms[side], f);
+		const g = sampleArm(ik.arms[side], f);
 		const S = geo[side + "UpperArm"].c0;
 		const u = sub(geo[side + "LowerArm"].c0, geo[side + "UpperArm"].c1);
 		const b = -(geo[side + "Hand"].c0[1] - geo[side + "LowerArm"].c1[1]) + geo[side + "Hand"].c1[1];

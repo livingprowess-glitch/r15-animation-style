@@ -176,6 +176,19 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Rule: **keep the elbow pole consistent through a strike.** Elbow down with only a slight outward drift ((∓0.6, -1, 0.1) at impact against (∓0.5, -1, 0.1) in guard).
   - Check with `node armroll.js <posedump.json> <Left|Right>`. Some reading remains from the arm swinging against world up; a real twist shows as a 50°+ swing that reverses.
   - Removing the roll lowered the game-speed peaks (jab 3.2k, cross 3.6k), because the roll had added angular speed without adding visible power.
+- (2026-10-14, user review) **"Still snapping right after the hit frame."** The per-frame profile found two causes:
+  1. The body (root, waist, head) moved at constant speed into the hit key, then nearly stopped in one frame (head 13 → 1.7 °/frame). The load key was "linear" and the hit key was a hard stop.
+  2. The punching arm decelerated into the hit key, then jumped back up for the follow-through (a stop-start at impact).
+
+  Rules for strikes:
+  - **No hit key on the body or the punching arm.** Each runs one segment from the load key to the follow-through key with `inOutCubic`, so speed rises, peaks around the old hit frame, and bleeds off.
+  - **Punch the fist in a straight world line.** `ikbake.js` arm keys accept `"world": true` (HumanoidRootPart-space position). Any segment touching a world key interpolates in world space, using a per-frame chest pose (`chestAt`, verified against Studio to 0.0000).
+  - `outCubic` on that segment over-reaches mid-path (the chest hasn't turned yet), so use `inOutCubic`.
+  - Get the world target from `aim.js` (its `world` output) at the follow-through frame, reach 1.76.
+  - Put the `Hit` marker where the fist is about 0.1 from the target (f22 here), not at the speed peak.
+  - Check: degrees per frame for the arm, root and head across the hit must be single-peaked.
+
+  Result: jab and cross peak at f20 and arrive at f24. The game-speed peaks dropped (jab 2.3k, cross 3.1k) because the snap is now smooth instead of a spike.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.

@@ -5,22 +5,19 @@ const K = { load: 15, hit: 20, over: 24, back: 38, settle: 38, end: 74 };
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
-		{ ${K.load}, 0, -36, 2, "linear", 0.04, -0.24, 0.48 },
-		{ ${K.hit}, -7, 18, -2, "outQuad", -0.03, -0.31, 0.25 },
+		{ ${K.load}, 0, -36, 2, "inOutCubic", 0.04, -0.24, 0.48 },
 		{ ${K.over}, -8, 22, -2, "inOutSine", -0.03, -0.31, 0.24 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
 		{ 0, -4, 9, -1, "inOutSine" },
-		{ ${K.load}, -3, 2, -2, "linear" },
-		{ ${K.hit}, -10, 18, 2, "outQuad" },
+		{ ${K.load}, -3, 2, -2, "inOutCubic" },
 		{ ${K.over}, -11, 20, 2, "inOutSine" },
 		{ LAST_FRAME, -4, 9, -1, "linear" },
 	},
 	Head = {
 		{ 0, -7, 15, 0.5, "inOutSine" },
-		{ ${K.load}, -8, 32, 1, "linear" },
-		{ ${K.hit}, -12, -34, -1, "outQuad" },
+		{ ${K.load}, -8, 32, 1, "inOutCubic" },
 		{ ${K.over}, -12, -38, -1, "inOutSine" },
 		{ LAST_FRAME, -7, 15, 0.5, "linear" },
 	},
@@ -51,9 +48,8 @@ const spec = {
 		],
 		Right: [
 			R(0, [0.62, 1.1, -1.06], "inOutSine"),
-			R(K.load, [0.72, 0.98, -0.9], "outQuad"),
-			R(K.hit, [1.135, 1.378, -1.569], "outQuad", [0.6, -1, 0.1]),
-			R(K.over, [1.293, 1.445, -1.509], "inOutCubic", [0.6, -1, 0.1]),
+			R(K.load, [0.72, 0.98, -0.9], "inOutCubic"),
+			{ f: K.over, pos: [-0.218, 0.663, -2.405], world: true, pole: [0.6, -1, 0.1], ease: "inOutCubic" },
 			R(K.back, [0.62, 1.1, -1.06], "linear"),
 			R(K.end, [0.62, 1.1, -1.06], "linear"),
 		],
@@ -75,6 +71,6 @@ const spec = {
 fs.writeFileSync(__dirname + "/cross_ik.json", JSON.stringify(spec, null, "\t"));
 const cfg = JSON.parse(fs.readFileSync(__dirname + "/cross.json", "utf8"));
 cfg.lastFrame = K.end;
-cfg.markers = { [K.hit]: "Hit" };
+cfg.markers = { [K.hit + 2]: "Hit" };
 fs.writeFileSync(__dirname + "/cross.json", JSON.stringify(cfg, null, "\t"));
 console.log("cross spec written", JSON.stringify(K));
