@@ -217,6 +217,14 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Balance: a deeper lean (-9/-13) pushed the cross to 11% on the rear foot, nearly tipping, so it was rolled back. **Range comes from rotation and steps, not lean.** The cross sits at 15–16% rear (committed); the jab at 38%.
 
   Lesson: the user preferred the **crisper hit-key stop and recoil** over the fully smooth bell-shaped drive. "Snap" complaints were about the arm twist, not about the hit being a hard stop. Don't smooth away the impact accent in future strikes. Cross game-speed peak with the flare is 2.5k (jab 3.2k); offer to sharpen if it reads soft.
+- (2026-10-14) **`Boxing_LeadHook_Orthodox`** (`work/mkhook.js`, 71 frames, `Hit` at f20, ends f70).
+  - **Rotation direction:** a lead hook turns the body **clockwise from above (root yaw more negative)**, the opposite of the cross. The wind-up opens the chest first (root -14, waist +10). Impact: root -42, waist -4 (chest about -46), neck +44 to hold the eyes.
+  - Turning the wrong way pulls the lead shoulder away (shoulder-to-fist 1.9, too straight). Over-rotating to chest -60 jams it (0.5–0.8, cramped).
+  - **Arm:** the bent arm is a rigid frame carried by the body. Target 1.6 ahead of the head on the centre line at chin height, which gives shoulder-to-fist 1.38 (about 90° elbow). Check candidate targets for 1.25–1.5 before baking.
+  - **Elbow:** chambered out and up in the wind-up (pole (-1, -0.05, 0.15)), level with the fist at impact (pole (-1, 0, 0.1)). It drops back to guard over hit+2 → hit+14 with inOutSine. outCubic over 8 frames gave a 16–19°/frame twist.
+  - **Lead foot:** pivots on the ball (yaw 3 → -38, pitch -24). The checker reports about 0.63 "slide", which is the pivot.
+  - **Weight:** loads onto the lead side (39% rear), then transfers to 60% rear at impact.
+  - **Speed:** the joint angular peak (1.5k at game speed) is low because the arm is carried, but the fist's linear speed (about 0.55 studs/frame) matches the cross. Judge hooks by fist speed.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
