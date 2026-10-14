@@ -48,8 +48,8 @@ const spec = {
 			L(0, [-0.74, 1.14, -1.14], "inOutSine"),
 			L(K.load, hand.load, "inQuad"),
 			L(K.hit, hand.hit, "outQuad"),
-			L(K.hit + 6, hand.hold, "outCubic"),
-			L(K.hit + 16, [-0.74, 1.14, -1.14], "linear"),
+			L(K.hit + 6, hand.hold, "inOutSine"),
+			L(K.hit + 18, [-0.74, 1.14, -1.14], "linear"),
 			L(K.end, [-0.74, 1.14, -1.14], "linear"),
 		],
 		Right: [

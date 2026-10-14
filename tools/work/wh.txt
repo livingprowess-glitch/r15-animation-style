@@ -1,0 +1,8 @@
+before: chars 31274 match false
+UpdateSourceAsync ok=true 
+t=0: chars 31271 match true
+t+0.5: chars 31271 match true
+t+1: chars 31271 match true
+t+2: chars 31271 match true
+t+4: chars 31271 match true
+IsCollaborative/TeamCreate service present=true
