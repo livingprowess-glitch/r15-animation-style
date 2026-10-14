@@ -196,6 +196,14 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Follow-up (user):** "The elbow flare should be in the wind-up, not mixed into the hit frame." The flare now peaks at the load key. Poles: guard (0.5, -1, 0.1) at f0 → **flare (1, -0.35, 0.1) at the load key** → punch line (0.75, -0.75, 0.1) at the follow-through → guard by the guard key, all inOutSine.
   - The elbow swings out 0.39 during the wind-up. Roll builds at up to 6°/frame across f1–15 and stays within ±4°/frame through the extension and hit.
   - Rule: **flares, chambers and other telegraphing belong in the wind-up. Keep the extension clean.**
+- (2026-10-14, user) **"The snap-back on the cross and jab seems off compared to before. Revert, but keep the cross's wind-up elbow flare."** Both strikes were restored to commit 203872f:
+  - hit key at f20 (`Hit` at f20);
+  - torso-space hands aimed with aim.js;
+  - outQuad into the hit, inOutCubic recoil.
+
+  Reverted out: the fa37bd6 single-curve body drive, the world-space straight-line fist path and Hit at f22. The cross keeps `poles.Right` (guard → flare at load → punch line (0.6, -1, 0.1) at the hit → guard).
+
+  Lesson: the user preferred the **crisper hit-key stop and recoil** over the fully smooth bell-shaped drive. "Snap" complaints were about the arm twist, not about the hit being a hard stop. Don't smooth away the impact accent in future strikes. Cross game-speed peak with the flare is 2.5k (jab 3.2k); offer to sharpen if it reads soft.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.

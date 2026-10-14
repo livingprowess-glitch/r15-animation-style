@@ -6,19 +6,22 @@ const hand = JSON.parse(process.argv[2] || "null") || { hit: [-1.144, 1.178, -1.
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
-		{ ${K.load}, 0, -18, 1.5, "inOutCubic", 0.03, -0.22, 0.48 },
+		{ ${K.load}, 0, -18, 1.5, "linear", 0.03, -0.22, 0.48 },
+		{ ${K.hit}, -6, -40, -1, "outQuad", 0, -0.26, 0.28 },
 		{ ${K.over}, -7, -43, -1, "inOutSine", 0, -0.26, 0.27 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
 		{ 0, -4, 9, -1, "inOutSine" },
-		{ ${K.load}, -3, 12, -1.5, "inOutCubic" },
+		{ ${K.load}, -3, 12, -1.5, "linear" },
+		{ ${K.hit}, -10, -8, 1, "outQuad" },
 		{ ${K.over}, -11, -9, 1, "inOutSine" },
 		{ LAST_FRAME, -4, 9, -1, "linear" },
 	},
 	Head = {
 		{ 0, -7, 15, 0.5, "inOutSine" },
-		{ ${K.load}, -8, 6, 0.5, "inOutCubic" },
+		{ ${K.load}, -8, 6, 0.5, "linear" },
+		{ ${K.hit}, -11, 44, 0, "outQuad" },
 		{ ${K.over}, -11, 47, 0, "inOutSine" },
 		{ LAST_FRAME, -7, 15, 0.5, "linear" },
 	},
@@ -41,8 +44,9 @@ const spec = {
 	arms: {
 		Left: [
 			L(0, [-0.74, 1.14, -1.14], "inOutSine"),
-			L(K.load, [-0.68, 1.04, -0.98], "inOutCubic"),
-			{ f: K.over, pos: [0.436, 0.759, -2.405], world: true, pole: [-0.6, -1, 0.1], ease: "inOutCubic" },
+			L(K.load, [-0.68, 1.04, -0.98], "outQuad"),
+			L(K.hit, hand.hit, "outQuad", [-0.6, -1, 0.1]),
+			L(K.over, hand.over, "inOutCubic", [-0.6, -1, 0.1]),
 			L(K.back, [-0.74, 1.14, -1.14], "linear"),
 			L(K.end, [-0.74, 1.14, -1.14], "linear"),
 		],
@@ -72,6 +76,6 @@ const spec = {
 fs.writeFileSync(__dirname + "/jab_ik.json", JSON.stringify(spec, null, "\t"));
 const cfg = JSON.parse(fs.readFileSync(__dirname + "/jab.json", "utf8"));
 cfg.lastFrame = K.end;
-cfg.markers = { [K.hit + 2]: "Hit" };
+cfg.markers = { [K.hit]: "Hit" };
 fs.writeFileSync(__dirname + "/jab.json", JSON.stringify(cfg, null, "\t"));
 console.log("jab spec written", JSON.stringify(K));
