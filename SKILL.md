@@ -322,3 +322,7 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Rising path:** aimed at HRP (0.6, 2.3, -3.8), off to the right side of the face so the fist doesn't graze the head mid-turn. Neck X goes 0 → +2 at the hit so the head isn't pitched into the path.
   - **Pullback:** over at f45 → hold at f51 → mid at f70 (0.6, 1.45, -1.45) → guard at f90. handspeed: 0.49 studs per 4 frames at most (v3 was about 1.0), and the pullback peaks at 13% of the strike.
   - **Hit frames must differ between strike types** (jab and cross at 20, hooks at 27, uppercut at 38). An uppercut loads longer than a hook.
+- (2026-10-14) **Pullback audit of the boxing set under the MANDATE** (handspeed.js, every frame, both hands):
+  - **Cross FAILED:** 0.71 studs in 4 frames at f29–33. Its return ran hit+6 → hit+18 (12 frames inOutSine). Fixed to hit+6 → hit+26 (the guard pole key moved with it): now 0.43 per 4 frames, peaking at 13% of the strike. Limb check clean, no arm roll (≤3°/frame).
+  - **Passed:** jab 0.47 (its return is shorter because the lead hand travels less), lead hook 0.31, rear hook 0.31, uppercut v4 0.49. Every guard hand is at ≤0.29.
+  - Rule of thumb: a straight rear-hand return of about 1.7 studs needs about 20 frames. The old "back to guard by hit+18" default is only safe for the lead jab.
