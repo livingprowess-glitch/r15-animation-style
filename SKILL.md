@@ -368,3 +368,12 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **A hanging arm must use an `aim` key (direction plus reach from the moving shoulder), not a world-fixed point.** A fixed point folds the arm into the body once the lean changes (ERROR at 1.5×). `ikbake` now supports `aim` keys on the first and last frames; before this it crashed.
   - **Build scripts must not hide bake failures:** `$(node ikbake … | grep …) || echo` swallowed the crash and shipped stale tracks. Capture the bake output into a variable first, so `set -e` stops the build.
 - (2026-10-14) **Exaggeration ladder, first run (kneel).** A single scale x multiplies every deviation from an upright kneel: pelvis tilt (-5-14x), chest fold (-6-35x), side-bend, head hang (neck X 26-10x), breathing size (waist ±3x°, hips ±0.03x). Five versions are installed as `Ladder_Kneel_x05 / x075 / Boxing_Knockdown_Kneel (x1) / x125 / x15`, with a gallery row ("Kneel x0.5" … "Kneel x1.5") 14 studs behind the boxing row. At 1.5× the hanging arm angles out (aim (2.6, -12, -3.6)) so the glove rests on the canvas rather than in it. Waiting on the user's pick; record the chosen x per body part as the style profile.
+- (2026-10-14) **Ladder result (kneel): the user picked 1.5×, the most exaggerated level offered.** This is the first measured style-profile point. For hurt or exhausted poses, start at the top of the range:
+  - pelvis tilt about -26°, chest fold about -58° (with foldExtra 19), side-bend root -30 / waist -24 toward the hurt or hanging side;
+  - neck counter-tilt half the side-bend, so the head stays level enough to read;
+  - head hang: neck X 11;
+  - the hanging glove resting on the canvas.
+
+  Next time, offer ladders that go *above* 1.5×: the user chose the ceiling, so the real preference may be higher still.
+  - **"Slow down the breaths":** each breath went from 1.0 s to 1.6 s (`breathScale` 1.6, a 192-frame loop: 35-frame inhale, 61-frame exhale, the second breath smaller). Heavy hurt breathing in this style is slow and deep, not panting.
+  - The final build uses `work/kneel_tune_x15.json`, i.e. `bash work/buildkneel.sh 1.5 Boxing_Knockdown_Kneel work/kneel_tune_x15.json`. The other four ladder modules, their gallery rigs and their source files have been deleted. The gallery rig is named "Knockdown Kneel".

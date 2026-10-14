@@ -10,7 +10,9 @@ const tune = Object.assign({
 	rearAnkle: [0.55, -2.6, 1.05], rearPitch: -75, rearYaw: -10,
 	leadHand: [-0.5, -1.55, -1.05], rearHand: [0.85, -2.95, 0.0], rearHang: [1.1, -12, -2.6], rearReach: 1.7, sideRoot: -6, sideWaist: -4, waistYaw: 0, foldExtra: 0,
 }, process.argv[4] ? JSON.parse(fs.readFileSync(process.argv[4], "utf8")) : {});
-const END = 120;
+const BS = tune.breathScale || 1;
+const END = Math.round(120 * BS);
+const bf = f => Math.round(f * BS);
 const r = v => +v.toFixed(3);
 
 const pose = {
@@ -19,8 +21,8 @@ const pose = {
 	neck: [26 - 10 * x, 4, 2 * x - 0.5 * (tune.sideRoot + tune.sideWaist) * x],
 };
 const breath = [
-	{ f: 0, b: 0, s: 0 }, { f: 22, b: 1, s: 0.4 }, { f: 60, b: 0, s: 0.7 },
-	{ f: 80, b: 0.85, s: 0.2 }, { f: END, b: 0, s: 0 },
+	{ f: 0, b: 0, s: 0 }, { f: bf(22), b: 1, s: 0.4 }, { f: bf(60), b: 0, s: 0.7 },
+	{ f: bf(80), b: 0.85, s: 0.2 }, { f: END, b: 0, s: 0 },
 ];
 const B = { rootY: 0.03 * x, rootX: 1.5 * x, waistX: 3 * x, neckX: -2 * x, sway: 1.5 * x };
 const key = (f, v, ease) => `\t\t{ ${f === END ? "LAST_FRAME" : f}, ${v.slice(0, 3).map(r).join(", ")}, "${ease}"${v.length > 3 ? ", " + v.slice(3).map(r).join(", ") : ""} },`;
