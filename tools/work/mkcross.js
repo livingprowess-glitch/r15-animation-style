@@ -68,6 +68,16 @@ const spec = {
 		],
 	},
 };
+spec.poles = {
+	Right: [
+		{ f: 0, pole: [0.5, -1, 0.1], ease: "inOutSine" },
+		{ f: K.load, pole: [0.6, -1, 0.1], ease: "inOutSine" },
+		{ f: K.hit - 1, pole: [1, -0.35, 0.1], ease: "inOutSine" },
+		{ f: K.over, pole: [0.85, -0.6, 0.1], ease: "inOutSine" },
+		{ f: K.back, pole: [0.5, -1, 0.1], ease: "linear" },
+		{ f: K.end, pole: [0.5, -1, 0.1], ease: "linear" },
+	],
+};
 fs.writeFileSync(__dirname + "/cross_ik.json", JSON.stringify(spec, null, "\t"));
 const cfg = JSON.parse(fs.readFileSync(__dirname + "/cross.json", "utf8"));
 cfg.lastFrame = K.end;

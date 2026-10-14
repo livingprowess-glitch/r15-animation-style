@@ -6,6 +6,7 @@
 //   "legs": { "Left": [ { "f": 0, "pos": [x,y,z], "pole": [x,y,z], "yaw": 0, "ease": "linear" }, ... ], "Right": [...] }  ankle pivot, HumanoidRootPart space
 // }
 // legs may also carry "pitch" (deg, Rx after yaw): negative raises the heel onto the ball of the foot; raise the ankle target by ~0.5*sin(|pitch|) to keep the toes on the floor.
+// optional "poles": { "Left": [ { "f", "pole", "ease" } ] } gives an arm its own elbow-direction timing (e.g. elbow flare mid-punch), independent of the hand keys.
 // The tracks template must contain __<PartName>__ placeholders for every solved joint block.
 const fs = require("fs");
 const [, , tplFile, ikFile, outFile] = process.argv;
@@ -130,6 +131,7 @@ const warnings = [];
 for (let f = 0; f <= lastFrame; f++) {
 	for (const side of Object.keys(ik.arms || {})) {
 		const g = sampleArm(ik.arms[side], f);
+		if (ik.poles && ik.poles[side]) g.pole = sampleTargets(ik.poles[side].map(k => ({ ...k, pos: k.pole })), f).pos;
 		const S = geo[side + "UpperArm"].c0;
 		const u = sub(geo[side + "LowerArm"].c0, geo[side + "UpperArm"].c1);
 		const b = -(geo[side + "Hand"].c0[1] - geo[side + "LowerArm"].c1[1]) + geo[side + "Hand"].c1[1];

@@ -189,6 +189,10 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Check: degrees per frame for the arm, root and head across the hit must be single-peaked.
 
   Result: jab and cross peak at f20 and arrive at f24. The game-speed peaks dropped (jab 2.3k, cross 3.1k) because the snap is now smooth instead of a spike.
+- (2026-10-14, user review) **"The cross attacks without flaring the elbow; stiff and strict."** Locking the elbow pole to guard (the twist fix) over-corrected. A rear-hand punch wants the elbow to come **out and up** mid-extension.
+  - The fix is pole timing independent of the hand keys: `ik.poles.Right` = guard (0.5, -1, 0.1) → load (0.6, -1, 0.1) → **flare (1, -0.35, 0.1) one frame before the old hit frame** → full reach (0.85, -0.6, 0.1) → back to guard by the guard key, all inOutSine.
+  - Result: the elbow goes out 0.45 and rises from 0.54 below the shoulder to 0.53 above it. Roll builds smoothly into the flare, eases off only 5–6°/frame at impact, and unwinds gently over the recovery (no snap-back).
+  - The twist the user hated was a big roll reversing **fast** right after the hit. A flare that settles slowly is wanted.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
