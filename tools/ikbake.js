@@ -99,7 +99,8 @@ const shoulderAt = (f, side) => { const c = chestAt(f); return add(c.pos, mv(c.R
 const sampleArm = (keys, f, side) => {
 	const toWorld = k => { if (k.world) return k.pos; const c = chestAt(k.f); return add(c.pos, mv(c.R, k.pos)); };
 	const toLocal = p => { const c = chestAt(f); return mv(tr(c.R), sub(p, c.pos)); };
-	if (f <= keys[0].f) return { pos: keys[0].world ? toLocal(keys[0].pos) : keys[0].pos, pole: keys[0].pole };
+	const at = k => { if (k.aim) { const S = shoulderAt(f, side); return { pos: toLocal(add(S, scale(norm(sub(k.aim, S)), k.reach))), pole: k.pole }; } return { pos: k.world ? toLocal(k.pos) : k.pos, pole: k.pole }; };
+	if (f <= keys[0].f) return at(keys[0]);
 	for (let i = 0; i < keys.length - 1; i++) {
 		const a = keys[i], b = keys[i + 1];
 		if (f <= b.f) {
@@ -125,8 +126,7 @@ const sampleArm = (keys, f, side) => {
 			return { pos: toLocal(A.map((v, j) => v + (B[j] - v) * t)), pole };
 		}
 	}
-	const last = keys[keys.length - 1];
-	return { pos: last.world ? toLocal(last.pos) : last.pos, pole: last.pole };
+	return at(keys[keys.length - 1]);
 };
 
 // two-bone solve in the parent space: S pivot, T target, u upper bone, b lower length, bendSign +1 elbow / -1 knee

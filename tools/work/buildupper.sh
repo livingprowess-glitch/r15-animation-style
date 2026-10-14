@@ -1,7 +1,7 @@
 set -e
 P="C:/Users/osaya/OneDrive/Documents/nenxiety26/anim_reader"
 node work/mkupper.js "$(cat work/upper_hand.json)" "$(cat work/upper_body.json)" >/dev/null
-echo "bake: $(node ikbake.js work/upper.tpl work/upper_ik.json work/upper_tracks.lua | grep -o 'WARN.*' || echo 'all frames reachable')"
+BAKE=$(node ikbake.js work/upper.tpl work/upper_ik.json work/upper_tracks.lua); echo "bake: $(echo "$BAKE" | grep -o "WARN.*" || echo "all frames reachable")"
 node gen_anim.js work/upper_tracks.lua work/upper.json work/upper.server.lua >/dev/null
 node script2data.js work/upper.server.lua "$P/Animations/Boxing_Uppercut_Orthodox.lua" >/dev/null
 node bundle.js "$P/AnimReader.lua" "$P/Animations/Boxing_Uppercut_Orthodox.lua" work/bundle_upper.lua >/dev/null
