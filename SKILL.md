@@ -225,6 +225,10 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Lead foot:** pivots on the ball (yaw 3 → -38, pitch -24). The checker reports about 0.63 "slide", which is the pivot.
   - **Weight:** loads onto the lead side (39% rear), then transfers to 60% rear at impact.
   - **Speed:** the joint angular peak (1.5k at game speed) is low because the arm is carried, but the fist's linear speed (about 0.55 studs/frame) matches the cross. Judge hooks by fist speed.
+  - **v2 (user): "More elbow flare in the wind-up, a longer wind-up, and farther reach."** K = load 22, hit 27, over 31, end 77 (`Hit` at f27).
+    - **Wind-up:** load pole (-0.8, 0.45, 0.25), so the elbow ends 0.32 **above** the shoulder and swings well out. The chamber glove sits at local (-1.421, 1.367, -0.801), cheek height, out and back. The wind-up also opens the chest more (root -10, waist +13).
+    - **Reach:** the impact target is 1.85 ahead of the head (was 1.6), giving shoulder-to-fist 1.58 (a wider hook). The fist peaks at 0.74 studs/frame (was 0.55).
+    - Balance (40% → 60% rear) and the smooth elbow drop are unchanged.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.

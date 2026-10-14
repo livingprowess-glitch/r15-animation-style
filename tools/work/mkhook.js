@@ -1,26 +1,26 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 15, hit: 20, over: 24, end: 70 };
+const K = { load: 22, hit: 27, over: 31, end: 77 };
 const hand = JSON.parse(process.argv[2] || "null") || { load: [-0.98, 1.08, -0.95], hit: [-0.78, 1.15, -1.25], hold: [-0.72, 1.17, -1.28] };
 
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {
 		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
-		{ ${K.load}, -3, -14, 4, "outQuad", -0.05, -0.23, 0.42 },
+		{ ${K.load}, -3, -10, 5, "outQuad", -0.06, -0.24, 0.44 },
 		{ ${K.hit}, -4, -42, -2, "outQuad", 0.03, -0.25, 0.4 },
 		{ ${K.over}, -4, -45, -2, "inOutSine", 0.03, -0.25, 0.4 },
 		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
 	},
 	UpperTorso = {
 		{ 0, -4, 9, -1, "inOutSine" },
-		{ ${K.load}, -5, 10, 3, "outQuad" },
+		{ ${K.load}, -5, 13, 4, "outQuad" },
 		{ ${K.hit}, -7, -4, -2, "outQuad" },
 		{ ${K.over}, -7, -5, -2, "inOutSine" },
 		{ LAST_FRAME, -4, 9, -1, "linear" },
 	},
 	Head = {
 		{ 0, -7, 15, 0.5, "inOutSine" },
-		{ ${K.load}, -9, 4, -2, "outQuad" },
+		{ ${K.load}, -9, -3, -2, "outQuad" },
 		{ ${K.hit}, -10, 44, 1, "outQuad" },
 		{ ${K.over}, -10, 48, 1, "inOutSine" },
 		{ LAST_FRAME, -7, 15, 0.5, "linear" },
@@ -63,7 +63,7 @@ const spec = {
 	poles: {
 		Left: [
 			{ f: 0, pole: [-0.5, -1, 0.1], ease: "inOutSine" },
-			{ f: K.load, pole: [-1, -0.05, 0.15], ease: "outQuad" },
+			{ f: K.load, pole: [-0.8, 0.45, 0.25], ease: "outQuad" },
 			{ f: K.hit, pole: [-1, 0, 0.1], ease: "linear" },
 			{ f: K.hit + 2, pole: [-1, 0, 0.1], ease: "inOutSine" },
 			{ f: K.hit + 14, pole: [-0.5, -1, 0.1], ease: "linear" },
