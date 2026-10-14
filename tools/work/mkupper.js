@@ -6,7 +6,7 @@ const body = JSON.parse(process.argv[3] || "null") || {};
 const B = Object.assign({
 	load: [-6, -32, -5, 0.05, -0.36, 0.46], hit: [-4, 4, 3, -0.02, -0.16, 0.3], over: [-2, 10, 3, -0.03, -0.12, 0.28],
 	wload: [-8, 2, -6], whit: [-4, 14, 3], wover: [-2, 16, 3],
-	nload: [-8, 26, 4], nhit: [-10, -16, -1], nover: [-12, -24, -1],
+	nload: [-8, 26, 4], rhit: -8, rover: -4, nhit: [-10, -16, -1], nover: [-12, -24, -1],
 }, body);
 const row = (f, v, ease) => `{ ${f}, ${v.slice(0, 3).join(", ")}, "${ease}"${v.length > 3 ? ", " + v.slice(3).join(", ") : ""} },`;
 
@@ -52,7 +52,7 @@ const leadHeel = (f, pitch, ease) => {
 	return { f, pos: [+(leadBall[0] - r * d[0]).toFixed(3), +(-2.929 + 0.5 * Math.sin(Math.abs(pitch) * D)).toFixed(3), +(leadBall[1] - r * d[2]).toFixed(3)], pole: [0, 0, -1], yaw: 3, pitch, ease };
 };
 const L = (f, pos, ease, pole = [-0.5, -1, 0.1]) => ({ f, pos, pole, ease });
-const R = (f, pos, ease, pole = [0.5, -1, 0.1]) => ({ f, pos, pole, ease });
+const R = (f, pos, ease, pole = [0.5, -1, 0.1]) => Array.isArray(pos) ? { f, pos, pole, ease } : { f, aim: pos.aim, reach: pos.reach, pole, ease };
 const spec = {
 	lastFrame: K.end,
 	arms: {
@@ -95,8 +95,8 @@ const spec = {
 		Right: [
 			rearIdle(0, "inOutSine"),
 			rearIdle(K.load - 3, "inQuad"),
-			rearPivot(K.hit, -8, -34, "outQuad"),
-			Object.assign(rearPivot(K.over, -4, -45, "inOutSine"), { pole: [-0.25, 0, -1] }),
+			rearPivot(K.hit, B.rhit, -36, "outQuad"),
+			Object.assign(rearPivot(K.over, B.rover, -46, "inOutSine"), { pole: [-0.25, 0, -1] }),
 			rearIdle(K.end - 20, "linear"),
 			rearIdle(K.end, "linear"),
 		],

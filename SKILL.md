@@ -297,3 +297,9 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Follow-through:** the rear fist ends at torso space (1.41, 1.62, -1.23), up past the head and forward, not just straight up.
   - **Chamber:** at torso z -1.29 the forearm clears the chest (v1 clipped at -1.16).
   - Rule: for uppercuts, the drama is in the vertical. Pair a deep load with a tall rise, and drive the rear heel and knee, rather than adding more turn.
+- (2026-10-14, user review of uppercut v2) **"Not close to forward enough; turn the body as the arm comes up."** v2's follow-through target was in torso space at (1.41, 1.62, -1.23): beside the head, and the body's backward rise (root and waist +X) dragged the head 1 stud behind its idle spot. In world terms the fist sat only 1.4 in front of the hips. v3:
+  - **Aim the rising fist in world space** with `aim` keys: the hit aims at HRP (-0.1, 2.3, -3.2) with reach 1.55 (arm still bent), and the follow-through at (-0.1, 3.0, -3.8) with reach 1.74. The fist now reaches z -1.98 at the hit and -2.32 at f33 (v2: -1.43), on the centre line.
+  - **No lean-back on the rise.** Root and waist X stay at -6 through hit and over; the height comes from the hips coming up (y -0.52 → -0.14) and moving forward (z 0.5 → 0.02).
+  - **Turn while rising:** hips -38 → +26 → +44 and chest -2 → +24 → +30 (74° total at f33). The neck counter-turns to -62 so the eyes stay forward. The rear foot pivots to yaw 0 → +4.
+  - Weight commits to about 22% on the rear foot through the follow-through.
+  - Rule: "forward" in a review means world forward of the head, so measure the fist's z against the head in the posedump. Never judge reach from torso-space targets once the torso turns or leans.
