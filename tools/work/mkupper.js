@@ -1,38 +1,13 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 22, hit: 27, over: 33, end: 77 };
-const hand = JSON.parse(process.argv[2] || "null") || { load: [0.75, 0.25, -0.85], hit: [0.6, 1.1, -1.4], hold: [0.55, 1.35, -1.35] };
-const body = JSON.parse(process.argv[3] || "null") || {};
-const B = Object.assign({
-	load: [-6, -32, -5, 0.05, -0.36, 0.46], hit: [-4, 4, 3, -0.02, -0.16, 0.3], over: [-2, 10, 3, -0.03, -0.12, 0.28],
-	wload: [-8, 2, -6], whit: [-4, 14, 3], wover: [-2, 16, 3],
-	nload: [-8, 26, 4], rhit: -8, rover: -4, nhit: [-10, -16, -1], nover: [-12, -24, -1],
-}, body);
-const row = (f, v, ease) => `{ ${f}, ${v.slice(0, 3).join(", ")}, "${ease}"${v.length > 3 ? ", " + v.slice(3).join(", ") : ""} },`;
-
-const tpl = `const TRACKS: { [string]: { Key } } = {
-	LowerTorso = {
-		{ 0, -1, -24, 1, "inOutSine", 0.02, -0.18, 0.43 },
-		${row("${K.load}", B.load, "inQuad")}
-		${row("${K.hit}", B.hit, "outQuad")}
-		${row("${K.over}", B.over, "inOutSine")}
-		{ LAST_FRAME, -1, -24, 1, "linear", 0.02, -0.18, 0.43 },
-	},
-	UpperTorso = {
-		{ 0, -4, 9, -1, "inOutSine" },
-		${row("${K.load}", B.wload, "inQuad")}
-		${row("${K.hit}", B.whit, "outQuad")}
-		${row("${K.over}", B.wover, "inOutSine")}
-		{ LAST_FRAME, -4, 9, -1, "linear" },
-	},
-	Head = {
-		{ 0, -7, 15, 0.5, "inOutSine" },
-		${row("${K.load}", B.nload, "inQuad")}
-		${row("${K.hit}", B.nhit, "outQuad")}
-		${row("${K.over}", B.nover, "inOutSine")}
-		{ LAST_FRAME, -7, 15, 0.5, "linear" },
-	},
-`.replace(/\$\{K\.(\w+)\}/g, (_, k) => K[k]) + fs.readFileSync(__dirname + "/jab_v1.tpl", "utf8").split("\tLeftUpperArm = {")[1].replace(/^/, "\tLeftUpperArm = {");
+const K = { pre: 20, load: 32, hit: 38, over: 45, hold: 51, mid: 70, guard: 90, end: 100 };
+const hand = JSON.parse(process.argv[2] || "null");
+const body = JSON.parse(process.argv[3] || "null");
+const IDLE = { root: [-1, -24, 1, 0.02, -0.18, 0.43], waist: [-4, 9, -1], neck: [-7, 15, 0.5] };
+const EASES = { 0: "inOutSine", pre: "inOutSine", load: "inQuad", hit: "outQuad", over: "inOutSine", hold: "inOutSine" };
+const fmt = (f, v, ease) => `		{ ${f}, ${v.slice(0, 3).join(", ")}, "${ease}"${v.length > 3 ? ", " + v.slice(3).join(", ") : ""} },`;
+const block = (part, name) => [`	${part} = {`, fmt(0, IDLE[name], EASES[0]), ...Object.keys(body[name]).map(k => fmt(K[k], body[name][k], EASES[k])), fmt("LAST_FRAME", IDLE[name], "linear"), "\t},"].join("\n");
+const tpl = "const TRACKS: { [string]: { Key } } = {\n" + block("LowerTorso", "root") + "\n" + block("UpperTorso", "waist") + "\n" + block("Head", "neck") + "\n" + fs.readFileSync(__dirname + "/jab_v1.tpl", "utf8").split("\tLeftUpperArm = {")[1].replace(/^/, "\tLeftUpperArm = {");
 fs.writeFileSync(__dirname + "/upper.tpl", tpl);
 
 const BALL = 0.42;
@@ -58,28 +33,35 @@ const spec = {
 	arms: {
 		Left: [
 			L(0, [-0.74, 1.14, -1.14], "inOutSine"),
-			L(K.load, [-0.72, 1.15, -1.12], "outQuad"),
-			L(K.hit, [-0.6, 1.17, -1.06], "outQuad", [-0.5, -1, 0.15]),
-			L(K.hit + 6, [-0.6, 1.17, -1.06], "inOutSine", [-0.5, -1, 0.15]),
-			L(K.hit + 18, [-0.74, 1.14, -1.14], "linear"),
+			L(K.pre, [-0.8, 1.2, -1.2], "inOutSine"),
+			L(K.load, [-0.84, 1.24, -1.24], "outQuad"),
+			L(K.hit, [-0.62, 1.18, -1.08], "outQuad", [-0.5, -1, 0.15]),
+			L(K.hold, [-0.62, 1.18, -1.08], "inOutSine", [-0.5, -1, 0.15]),
+			L(K.guard, [-0.74, 1.14, -1.14], "linear"),
 			L(K.end, [-0.74, 1.14, -1.14], "linear"),
 		],
 		Right: [
 			R(0, [0.62, 1.1, -1.06], "inOutSine"),
+			R(K.pre, hand.pre, "inOutSine"),
 			R(K.load, hand.load, "inQuad"),
 			R(K.hit, hand.hit, "outQuad"),
-			R(K.hit + 6, hand.hold, "inOutSine"),
-			R(K.hit + 18, [0.62, 1.1, -1.06], "linear"),
+			R(K.over, hand.over, "inOutSine"),
+			R(K.hold, hand.hold, "inQuad"),
+			R(K.mid, hand.mid, "outQuad"),
+			R(K.guard, [0.62, 1.1, -1.06], "linear"),
 			R(K.end, [0.62, 1.1, -1.06], "linear"),
 		],
 	},
 	poles: {
 		Right: [
 			{ f: 0, pole: [0.5, -1, 0.1], ease: "inOutSine" },
-			{ f: K.load, pole: [0.6, -1, 0.25], ease: "inQuad" },
-			{ f: K.hit, pole: [0.35, -1, 0.15], ease: "linear" },
-			{ f: K.hit + 6, pole: [0.4, -1, -0.25], ease: "inOutSine" },
-			{ f: K.hit + 18, pole: [0.5, -1, 0.1], ease: "linear" },
+			{ f: K.pre, pole: [1, -0.8, 0.3], ease: "inOutSine" },
+			{ f: K.load, pole: [1, -0.9, 0.35], ease: "inQuad" },
+			{ f: K.hit, pole: [0.35, -1, 0.15], ease: "outQuad" },
+			{ f: K.over, pole: [0.4, -1, -0.25], ease: "inOutSine" },
+			{ f: K.hold, pole: [0.4, -1, -0.25], ease: "inQuad" },
+			{ f: K.mid, pole: [0.45, -1, 0], ease: "outQuad" },
+			{ f: K.guard, pole: [0.5, -1, 0.1], ease: "linear" },
 			{ f: K.end, pole: [0.5, -1, 0.1], ease: "linear" },
 		],
 	},
@@ -89,15 +71,17 @@ const spec = {
 			leadIdle(K.load, "inQuad"),
 			leadHeel(K.hit, -10, "outQuad"),
 			leadHeel(K.over, -22, "inOutSine"),
-			leadIdle(K.end - 10, "linear"),
+			leadHeel(K.hold, -20, "inOutSine"),
+			leadIdle(K.guard, "linear"),
 			leadIdle(K.end, "linear"),
 		],
 		Right: [
 			rearIdle(0, "inOutSine"),
-			rearIdle(K.load - 3, "inQuad"),
-			rearPivot(K.hit, B.rhit, -36, "outQuad"),
-			Object.assign(rearPivot(K.over, B.rover, -46, "inOutSine"), { pole: [-0.25, 0, -1] }),
-			rearIdle(K.end - 20, "linear"),
+			rearIdle(K.load, "inQuad"),
+			rearPivot(K.hit, body.rhit, -36, "outQuad"),
+			Object.assign(rearPivot(K.over, body.rover, -46, "inOutSine"), { pole: [-0.25, 0, -1] }),
+			Object.assign(rearPivot(K.hold, body.rover, -44, "inOutSine"), { pole: [-0.25, 0, -1] }),
+			rearIdle(K.guard, "linear"),
 			rearIdle(K.end, "linear"),
 		],
 	},

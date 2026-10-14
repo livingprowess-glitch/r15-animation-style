@@ -16,6 +16,17 @@ The user doesn't want a new Script for every animation. Deliver each animation a
 - **Preview:** `ServerScriptService.AnimPreview` plays the module named in its `Animation` attribute on the rig named in `Rig`.
 - **Code style:** the reader follows the Luau preferences (`const`, no comments). Data modules carry no comments.
 
+## MANDATE: no snapping pullbacks (applies to every strike and every return, not only hit-to-guard)
+The user has rejected the same artifact three times (jab, cross, uppercut v3): a limb fully extended on one frame and tucked back a few frames later. Every pullback, recovery, retract or return-to-guard of any limb must be slow and continuous.
+- **Measure, don't eyeball.** After every bake, dump every frame (`node mkrender.js <bundle> $(seq -s, 0 <lastFrame>)`, then `rbxrun.sh posedump_run.lua`) and run `node handspeed.js <posedump.json> <Left|Right> <hitFrame>` for each striking hand (and for a foot on kicks, after changing the part name).
+- **Limits** (hard gate, same as a limb ERROR, so never install past them): pullback peak speed ≤ 45% of the strike's peak, and no more than 0.6 studs of hand travel in any 4 consecutive frames after hit+2.
+- **How to meet them:**
+  - Hold the extension 6+ frames.
+  - Retract over at least ~2.5× the strike's travel time: about 35 frames for a ~2 stud return at base speed.
+  - Use a path key midway with eases that keep the speed continuous (`inQuad` out of the hold, `outQuad` out of the midpoint). Two inOutSine segments stop dead at the midpoint, and a single short inOutSine bunches 70% of the travel into its middle third.
+  - Scale the retract to the distance: a bigger extension (uppercut follow-through) needs a longer return than a jab.
+- Report the handspeed line with every strike delivery.
+
 ## Workflow
 1. **Check the place.** Run `rbx.ps1 -Op status` first (see the rbxbridge memory). Guard every write with a place check.
 2. **Author key poses, not frames.** Copy `reference/kiai_burst.server.lua`, keep everything outside `TRACKS`, and write new `TRACKS`. Key format: `{ frame, rx, ry, rz, easeName, px?, py?, pz? }` in degrees and studs, in joint space. The easing named on a key shapes the segment *leaving* that key.
@@ -303,3 +314,11 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **Turn while rising:** hips -38 → +26 → +44 and chest -2 → +24 → +30 (74° total at f33). The neck counter-turns to -62 so the eyes stay forward. The rear foot pivots to yaw 0 → +4.
   - Weight commits to about 22% on the rear foot through the follow-through.
   - Rule: "forward" in a review means world forward of the head, so measure the fist's z against the head in the posedump. Never judge reach from torso-space targets once the torso turns or leans.
+- (2026-10-14, user review of uppercut v3) **The wind-up was too high and bunched (both gloves stacked in front of the chest), the torso wasn't coiled enough, the wind-up was too short and lacked stylistic exaggeration, and the hit frame matched the hooks.** Also: extended at f36 and tucked by f40, the snap that is now the MANDATE above. v4 (`work/mkupper.js`, 101 frames, `Hit` at f38):
+  - **Two-stage wind-up:** f0 → f20 (coil, inOutSine) → f32 (deepest, inQuad into the drive), 32 frames in total.
+  - **Rear fist drops low and out** to UpperTorso (1.0, 0.32, -1.3), at the hip and well away from the lead glove, with the elbow pole out to the side (1, -0.9, 0.35). Keep torso-space z ≤ -1.25 for a low chamber, or the forearm sinks into the chest (an ERROR at z -1.02).
+  - **The lead glove pushes slightly forward and out** during the wind-up (-0.84, 1.24, -1.24) to widen the gap.
+  - **Deeper coil:** hips -44 and chest -20 (64° past square), a side tilt of -12/-15, the neck counter-turned to +54, and 83% of the weight on the rear foot at load.
+  - **Rising path:** aimed at HRP (0.6, 2.3, -3.8), off to the right side of the face so the fist doesn't graze the head mid-turn. Neck X goes 0 → +2 at the hit so the head isn't pitched into the path.
+  - **Pullback:** over at f45 → hold at f51 → mid at f70 (0.6, 1.45, -1.45) → guard at f90. handspeed: 0.49 studs per 4 frames at most (v3 was about 1.0), and the pullback peaks at 13% of the strike.
+  - **Hit frames must differ between strike types** (jab and cross at 20, hooks at 27, uppercut at 38). An uppercut loads longer than a hook.

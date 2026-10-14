@@ -8,7 +8,7 @@ node bundle.js "$P/AnimReader.lua" "$P/Animations/Boxing_Uppercut_Orthodox.lua" 
 node mkcheck.js work/bundle_upper.lua >/dev/null
 ./rbxrun.sh check.lua work/upper_dump.txt
 grep -v "per frame\|^dump" work/upper_dump.txt | head -20
-node mkrender.js work/bundle_upper.lua 0,22,25,27,33,45 >/dev/null
+node mkrender.js work/bundle_upper.lua $(seq -s, 0 100) >/dev/null
 ./rbxrun.sh posedump_run.lua work/upper_pose.json >/dev/null
-node balance.js work/upper_pose.json | grep -o "^f[0-9]*\|rear foot ≈ [0-9]*%" | paste - - 
-node render.js work/upper_pose.json work/upper_v3.png | head -1
+node balance.js work/upper_pose.json > work/upper_bal.txt; grep -E "^f(0|20|32|38|45|51|70|90|100) COM" work/upper_bal.txt | sed "s/COM.*≈//"
+node handspeed.js work/upper_pose.json Right 38
