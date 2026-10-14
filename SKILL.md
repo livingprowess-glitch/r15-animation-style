@@ -172,6 +172,10 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Rule: a recovery is **one body curve** from the follow-through key straight to the last frame (inOutSine), with no intermediate body keys. The arms ease back to guard (inOutCubic) by about f36–38 and hold there.
   - Check: profile `analyze(...).body` across the recovery. After the 1-frame follow-through pause there must be no dip that rises again.
 - (2026-10-14) **Hand-off to a looping base.** The attack's last frame equals the idle's frame 0, but the idle underneath is usually mid-cycle. Players (AnimGallery, AnimPreview) now start the attack on `base.DidLoop` with fade 0 and set `base.TimePosition = 0` when the attack stops. The user's in-game attack system needs the same sync (or its own fade) for a seamless reset.
+- (2026-10-14, user review) **"After the hit, the attacking arm twists back."** Not intended. The elbow pole switched from guard (elbow down) to impact (elbow out, a fake fist turn-over), so the IK rolled the whole upper arm about 60–70° on the way out and back on the return. The wrists are static on these rigs, so arm roll can't be hidden in the forearm.
+  - Rule: **keep the elbow pole consistent through a strike.** Elbow down with only a slight outward drift ((∓0.6, -1, 0.1) at impact against (∓0.5, -1, 0.1) in guard).
+  - Check with `node armroll.js <posedump.json> <Left|Right>`. Some reading remains from the arm swinging against world up; a real twist shows as a 50°+ swing that reverses.
+  - Removing the roll lowered the game-speed peaks (jab 3.2k, cross 3.6k), because the roll had added angular speed without adding visible power.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
