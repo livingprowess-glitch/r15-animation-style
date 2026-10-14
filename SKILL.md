@@ -193,6 +193,9 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - The fix is pole timing independent of the hand keys: `ik.poles.Right` = guard (0.5, -1, 0.1) → load (0.6, -1, 0.1) → **flare (1, -0.35, 0.1) one frame before the old hit frame** → full reach (0.85, -0.6, 0.1) → back to guard by the guard key, all inOutSine.
   - Result: the elbow goes out 0.45 and rises from 0.54 below the shoulder to 0.53 above it. Roll builds smoothly into the flare, eases off only 5–6°/frame at impact, and unwinds gently over the recovery (no snap-back).
   - The twist the user hated was a big roll reversing **fast** right after the hit. A flare that settles slowly is wanted.
+  - **Follow-up (user):** "The elbow flare should be in the wind-up, not mixed into the hit frame." The flare now peaks at the load key. Poles: guard (0.5, -1, 0.1) at f0 → **flare (1, -0.35, 0.1) at the load key** → punch line (0.75, -0.75, 0.1) at the follow-through → guard by the guard key, all inOutSine.
+  - The elbow swings out 0.39 during the wind-up. Roll builds at up to 6°/frame across f1–15 and stays within ±4°/frame through the extension and hit.
+  - Rule: **flares, chambers and other telegraphing belong in the wind-up. Keep the extension clean.**
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
