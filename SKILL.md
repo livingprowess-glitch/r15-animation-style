@@ -160,6 +160,13 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Re-run aim.js whenever the body keys change.
   - The jab was re-aimed the same way: reach 1.76 at impact (f16) and 1.70 at the rebound (f19), aim offset (+0.9, -0.15, -3.5). It now lands 0.03 from the head line at chin height (0.50 below head centre), with the forearm level.
   - The lead hand needs a positive dx and the rear hand a negative dx, because each shoulder sits off the centre line on its own side.
+- (2026-10-14) **Jab v3 has the cross's exaggeration grammar** (`work/mkjab.js`, 69 frames, `Hit` at f20).
+  - **Wind-up:** 15 frames. The lead shoulder draws back (root yaw -18, waist +12) and the lead glove drops.
+  - **Snap and turn:** a 5-frame snap. Chest turn 46° (×1.55 the old jab), a shoulder dive (lean -18°), hip sink -0.26 with the hips driving forward to 0.28.
+  - **Follow-through:** about 3° past impact.
+  - **Rear heel:** lifts to -20 with the ball fixed.
+  - **Result:** weight about 41% rear (less committed than the cross's 22%), lead knee about 121°, aimed with `aim.js` (dx +0.9). Peak at game speed 4.1k stays under the cross's 4.5k.
+  - Build order for any strike: body keys → mk*.js with placeholder hands → dump the impact frames → `aim.js` → rebuild with the aimed hands.
 - (2026-10-14) **`AnimPreview` attributes:** `Base` (looping underlay, e.g. the idle), `Animation` (one-shot repeated every `Interval` seconds, or a loop), `Rig`.
 - (2026-10-14) **Always render before reporting.**
   - `node mkrender.js <script or bundle> 0,15,30,45`, then `rbxrun.sh posedump_run.lua out.json`, then `node render.js out.json out.png`. That gives front, left-side and three-quarter views per frame.
