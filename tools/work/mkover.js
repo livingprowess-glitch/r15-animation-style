@@ -98,10 +98,10 @@ const spec = {
 		],
 		Right: [
 			{ f: 0, pos: G.rHand, pole: [0.5, -1, 0.1], ease: "inOutSine" },
-			{ f: K.load, pos: toward(H.chamber, ke), pole: [1, 0.5, 0.3], ease: "inQuad" },
+			{ f: K.load, pos: toward(H.chamber, ke), pole: V.poles?.load || [1, 0.5, 0.3], ease: "inQuad" },
 			{ f: K.apex, pos: H.apex, pole: V.poles?.apex || [0.85, 0.7, 0.1], ease: "linear" },
 			{ f: K.hit, aim, reach, pole: V.poles?.hit || [0.7, 0.7, 0.15], ease: "outQuad", lerp: V.lerp || e > 2 },
-			{ f: K.over, pos: H.over, lerp: V.lerp || e > 2, pole: V.poles?.over || [0.7, 0.7, 0.15], ease: "inOutSine" },
+			V.overAim ? { f: K.over, aim: V.overAim, reach: V.overReach || reach - 0.04, pole: V.poles?.over || [0.7, 0.7, 0.15], ease: "inOutSine" } : { f: K.over, pos: H.over, lerp: V.lerp || e > 2, pole: V.poles?.over || [0.7, 0.7, 0.15], ease: "inOutSine" },
 			{ f: K.guard, pos: G.rHand, pole: [0.5, -1, 0.1], ease: "linear" },
 			{ f: K.end, pos: G.rHand, pole: [0.5, -1, 0.1], ease: "linear" },
 		],
@@ -118,6 +118,7 @@ const spec = {
 		],
 	},
 };
+if (V.rPoles) spec.poles = { Right: V.rPoles.map(([f, pole, ease]) => ({ f: typeof f === "string" ? K[f] : f, pole, ease })) };
 fs.writeFileSync(__dirname + `/${name}_ik.json`, JSON.stringify(spec, null, "\t"));
 fs.writeFileSync(__dirname + `/${name}.json`, JSON.stringify({
 	name, label: V.label || name, lastFrame: K.end, loop: false, priority: "Action", markers: { [K.hit]: "Hit" },

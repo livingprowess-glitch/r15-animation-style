@@ -35,16 +35,21 @@ function legs(pose) {
 }
 
 function armRoll(poses, side) {
-	let prev = null;
+	const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+	const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+	let prev = null, roll = 0;
 	return sorted(poses).map(pose => {
 		const ua = pose.parts[side + "UpperArm"];
 		const axis = [ua.r[3], ua.r[4], ua.r[5]], hinge = [ua.r[0], ua.r[1], ua.r[2]];
-		const ref = [0, 1, 0].map((v, i) => v - axis[i] * axis[1]); const rn = Math.hypot(...ref);
-		const r = ref.map(v => v / rn);
-		const cr = [axis[1] * r[2] - axis[2] * r[1], axis[2] * r[0] - axis[0] * r[2], axis[0] * r[1] - axis[1] * r[0]];
-		const roll = Math.atan2(hinge[0] * cr[0] + hinge[1] * cr[1] + hinge[2] * cr[2], hinge[0] * r[0] + hinge[1] * r[1] + hinge[2] * r[2]) * D;
-		let d = prev === null ? 0 : roll - prev; if (d > 180) d -= 360; if (d < -180) d += 360;
-		prev = roll;
+		let d = 0;
+		if (prev) {
+			const v = cross(prev.axis, axis), c = dot(prev.axis, axis);
+			const h = prev.hinge, vh = cross(v, h);
+			const moved = c > -0.999 ? h.map((x, i) => x + vh[i] + cross(v, vh)[i] / (1 + c)) : h;
+			d = Math.atan2(dot(axis, cross(moved, hinge)), dot(moved, hinge)) * D;
+		}
+		roll += d;
+		prev = { axis, hinge };
 		return { frame: pose.frame, roll, change: d };
 	});
 }

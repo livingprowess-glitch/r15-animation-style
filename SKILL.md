@@ -438,3 +438,16 @@ Append each user correction here as a rule: what was wrong, which joint, and the
     - World-pinned follow-through points send the return through the body; keep follow-through endpoints in chest space.
   - **Lint change:** the pullback gate now starts where the hand is farthest from its final pose after the hit (the real pullback start), not at hit+2. A drive-through follow-through is no longer counted as a pullback. All boxing strikes still pass.
   - **When the user picks:** record the chosen `e` and style as the default first-draft profile here and in memory, and delete the unchosen variants (modules, gallery rigs, source files).
+- (2026-10-15) **`Ki_Blast`**: the first one-shot under the USER STYLE PROFILE (e 2.0, 130 frames, Hit = release at f29, chains from the boxing idle). Built from the same generator with `work/over/Ki_Blast.json`:
+  - **Charge:** the rear hand goes to the hip while the lead hand reaches forward to aim (push-pull).
+  - **Release:** a straight palm thrust at chest height with the Anime rear-heel drive.
+  - **Follow-through:** an `overAim` key keeps the extended arm locked on the target while the body folds forward.
+  - The overhand's yaw overshoot is cancelled with adds (root hold -14, waist -10) so the arm doesn't get dragged across the body.
+
+  **Lessons:**
+  - **R15 arms are full-width blocks.** A forearm can't tuck against the side of the torso: its centre needs |x| ≥ ~1.45, or it has to sit clearly in front (z ≤ -1.0) or behind. A hip chamber at torso (1.45, -0.55, -0.6) works.
+  - **Keep every hand path at least ~0.9 from the shoulder pivot** (0.97, 0.6, 0). Passing closer folds the arm tight and the elbow swings into the chest. Check both the straight line *between* keys and the keys themselves.
+  - **The thrust midpoint goes on the line toward the target** (in front of the stomach), not up by the shoulder.
+  - **When the hand drops below the shoulder, turn the elbow outward first.** Use an explicit `rPoles` timeline (outward pole by f6) before the arm hangs, because a down-pointing pole lines up with a hanging arm and the IK picks a side at random.
+  - **The twist metric was rewritten.** `posemetrics.armRoll` now carries the previous hinge across the arm's swing (minimal rotation) and measures the remaining roll. The old roll-against-world-up spiked falsely whenever the upper arm hung vertical (64°/frame on a ki blast that really twisted 34). The boxing set's numbers barely moved, so the gate still catches real twists.
+- (2026-10-15) Cleanup: the unchosen overhand variants were removed from Studio and disk. Only `Exag_x20` (gallery "Exaggeration 2.0x") remains as the profile reference.
