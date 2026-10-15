@@ -73,4 +73,29 @@ function poseDiff(a, b) {
 	return { pos, rot };
 }
 
-module.exports = { balance, legs, armRoll, travel, poseDiff, sorted, EXTREMITIES };
+const PARENT = { LowerTorso: null, UpperTorso: "LowerTorso", Head: "UpperTorso", LeftUpperArm: "UpperTorso", LeftLowerArm: "LeftUpperArm", RightUpperArm: "UpperTorso", RightLowerArm: "RightUpperArm", LeftUpperLeg: "LowerTorso", LeftLowerLeg: "LeftUpperLeg", LeftFoot: "LeftLowerLeg", RightUpperLeg: "LowerTorso", RightLowerLeg: "RightUpperLeg", RightFoot: "RightLowerLeg" };
+const M3 = r => [[r[0], r[3], r[6]], [r[1], r[4], r[7]], [r[2], r[5], r[8]]];
+const mul = (a, b) => a.map(row => [0, 1, 2].map(j => row[0] * b[0][j] + row[1] * b[1][j] + row[2] * b[2][j]));
+const T = a => [0, 1, 2].map(i => [0, 1, 2].map(j => a[j][i]));
+const localRot = (pose, n) => { const r = M3(pose.parts[n].r), p = PARENT[n]; return p ? mul(T(M3(pose.parts[p].r)), r) : r; };
+const rotAngle = (a, b) => { const r = mul(T(a), b); return Math.acos(Math.max(-1, Math.min(1, (r[0][0] + r[1][1] + r[2][2] - 1) / 2))) * D; };
+
+// summed local joint rotation (deg) per frame across the whole body
+function bodyMotion(poses) {
+	const ps = sorted(poses);
+	return ps.slice(1).map((p, i) => ({ frame: p.frame, sum: Object.keys(PARENT).reduce((s, n) => s + rotAngle(localRot(ps[i], n), localRot(p, n)), 0) }));
+}
+
+// per-frame direction change (deg) of a part's path, with its speed
+function turns(poses, part) {
+	const ps = sorted(poses), out = [];
+	for (let i = 2; i < ps.length; i++) {
+		const a = ps[i - 2].parts[part].p, b = ps[i - 1].parts[part].p, c = ps[i].parts[part].p;
+		const u = b.map((v, k) => v - a[k]), v = c.map((x, k) => x - b[k]), lu = Math.hypot(...u), lv = Math.hypot(...v);
+		if (lu < 1e-4 || lv < 1e-4) continue;
+		out.push({ frame: ps[i].frame, turn: Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / lu / lv))) * D, speed: Math.min(lu, lv) });
+	}
+	return out;
+}
+
+module.exports = { balance, legs, armRoll, travel, poseDiff, sorted, bodyMotion, turns, EXTREMITIES };

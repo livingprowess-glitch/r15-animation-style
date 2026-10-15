@@ -42,6 +42,8 @@ It bundles the module as it is on disk, runs everything against a fresh rig in S
 | balance | centre of mass leaves the feet | weight outside 10–90% rear |
 | knees follow toes / locked | knee more than 25° off its toes | > 12°, or a knee at 178°+ |
 | arm twist per frame | > 50° | > 30° |
+| no whole-body freeze after the hit (sum of all joint rotation) | 2+ frames under 2°/f between hit+2 and 60% of the way to the end | |
+| striking limb: no sudden reversal (path turn in one frame, speed > 0.002) after hit+1 | > 75° | |
 | pullback snap, every hand and foot after hit+2 | > 0.6 studs in any 4 frames, or the striking limb's pullback peak > 45% of its strike peak | |
 | hit frame distinct from same-prefix strikes | | shared Hit frame |
 
@@ -377,3 +379,20 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   Next time, offer ladders that go *above* 1.5×: the user chose the ceiling, so the real preference may be higher still.
   - **"Slow down the breaths":** each breath went from 1.0 s to 1.6 s (`breathScale` 1.6, a 192-frame loop: 35-frame inhale, 61-frame exhale, the second breath smaller). Heavy hurt breathing in this style is slow and deep, not panting.
   - The final build uses `work/kneel_tune_x15.json`, i.e. `bash work/buildkneel.sh 1.5 Boxing_Knockdown_Kneel work/kneel_tune_x15.json`. The other four ladder modules, their gallery rigs and their source files have been deleted. The gallery rig is named "Knockdown Kneel".
+- (2026-10-14, user review) **"Cross still snaps weird from frame 25–28"**, even though the travel gate passed (0.43 per 4 frames). The cause wasn't speed but a **synchronized dead stop and reversal**:
+  - The body's follow-through key (`over`) and the arm's hold key both landed on hit+6 (f26), so every joint reached 0 velocity together (≈1°/f summed over the whole body).
+  - The fist, attached to the shoulder by its `aim` key, crept 0.08 forward through the hold, then reversed 101° in one frame at f27.
+
+  **Fixes:**
+  - **Overlap.** Body `over` moved from hit+6 to hit+12, so the hips and chest keep easing through while the arm starts back. The fist now curves into the return (max turn 50°).
+  - **Jab:** the same structure measured 110°. It got the same overlap, plus a slight inward drift of the hold aim point (+0.35 x), so the hold motion already heads the way the return goes (max turn 58°).
+  - **Uppercut:** it had two stops (the apex at `over`, then a dead `hold` key). The arm's hold key was dropped (over → mid with `inQuad` is a natural hang at the apex), and the chest keeps turning +8° through the hold. Max turn 109° → 68°.
+
+  **Don'ts:**
+  - Pinning the fist in world space during a hold is WRONG while the body follows through: the elbow crumples (20° → 46°).
+  - Shrinking the hold reach does the same thing (jab, 1.66 → elbow 45°).
+
+  **Rules:**
+  - Never end the body's follow-through on the same frame as the arm's hold.
+  - Never let a limb reverse along its own path. Make it arc.
+  - These are now lint gates (whole-body freeze; sudden reversal > 75°). Calibration: the user flagged 101°, and the approved hooks sit at 74°.

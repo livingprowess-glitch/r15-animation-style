@@ -1,6 +1,6 @@
 const fs = require("fs");
 const D = Math.PI / 180;
-const K = { load: 15, hit: 20, over: 26, back: 38, settle: 38, end: 74 };
+const K = { load: 15, hit: 20, over: 32, back: 38, settle: 38, end: 74 };
 
 const tpl = `const TRACKS: { [string]: { Key } } = {
 	LowerTorso = {

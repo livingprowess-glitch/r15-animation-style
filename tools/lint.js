@@ -23,7 +23,7 @@ const hit = hitM ? Number(hitM[1]) : null;
 const prefix = name.split("_")[0];
 const chain = args.includes("--no-chain") ? null : opt("--chain", prefix === "Boxing" && !loop ? "Boxing_Idle_Orthodox" : null);
 
-const LIMIT = { snapStuds: 0.6, snapWin: 4, snapRatio: 0.45, kneeWarn: 12, kneeFail: 25, rollWarn: 30, rollFail: 50, chainPos: 0.005, chainRot: 0.005 };
+const LIMIT = { snapStuds: 0.6, snapWin: 4, snapRatio: 0.45, kneeWarn: 12, kneeFail: 25, rollWarn: 30, rollFail: 50, chainPos: 0.005, chainRot: 0.005, freezeSum: 2, reverseDeg: 75 };
 
 function rbx(file) {
 	for (let i = 0; i < 20; i++) {
@@ -127,6 +127,19 @@ for (const part of M.EXTREMITIES) {
 	add(`${part} pullback snap${part === striker ? " (striking limb)" : ""}`, status, detail);
 }
 
+if (hit !== null) {
+	const settle = Math.round(hit + (lastFrame - hit) * 0.6);
+	const bm = M.bodyMotion(poses).filter(b => b.frame > hit + 1 && b.frame <= settle);
+	let run = [], worstRun = [];
+	for (const b of bm) { if (b.sum < LIMIT.freezeSum) { run.push(b.frame); if (run.length > worstRun.length) worstRun = run.slice(); } else run = []; }
+	const minB = bm.reduce((m, b) => (b.sum < m.sum ? b : m), { sum: Infinity });
+	add("no whole-body freeze after the hit", worstRun.length >= 2 ? "FAIL" : "ok", `quietest frame f${minB.frame} (${minB.sum.toFixed(1)}°/f summed over all joints)${worstRun.length >= 2 ? `; frozen f${worstRun[0]}-f${worstRun[worstRun.length - 1]}` : ""} (limit: 2+ frames under ${LIMIT.freezeSum}°/f between f${hit + 2} and f${settle})`);
+	if (striker) {
+		const tn = M.turns(poses, striker).filter(t => t.frame > hit + 1 && t.speed > 0.002);
+		const w = tn.reduce((m, t) => (t.turn > m.turn ? t : m), { turn: 0 });
+		add(`${striker} no sudden reversal`, w.turn > LIMIT.reverseDeg ? "FAIL" : "ok", `sharpest path turn after the hit ${w.turn.toFixed(0)}° in one frame (f${w.frame}); limit ${LIMIT.reverseDeg}°`);
+	}
+}
 if (hit !== null) {
 	const same = fs.readdirSync(path.join(SRC, "Animations")).filter(f => f.startsWith(prefix + "_") && f !== name + ".lua").filter(f => {
 		const m = fs.readFileSync(path.join(SRC, "Animations", f), "utf8").match(/\[(\d+)\]\s*=\s*"Hit"/);
