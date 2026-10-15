@@ -16,6 +16,27 @@ The user doesn't want a new Script for every animation. Deliver each animation a
 - **Preview:** `ServerScriptService.AnimPreview` plays the module named in its `Animation` attribute on the rig named in `Rig`.
 - **Code style:** the reader follows the Luau preferences (`const`, no comments). Data modules carry no comments.
 
+## USER STYLE PROFILE: default for every first draft (set by the user's picks, 2026-10-15)
+**Exaggeration 2.0 is the target.** The user called the 2.0× overhand "the smoothest cleanest looking animation that fits my exact style, your best one shot animation yet". Earlier picks agree: the kneel ladder max (1.5×, the highest offered), and every strike review asked for more (deeper dip, longer wind-up, more turn, further reach).
+
+Start every new strike at these proportions, measured on `Exag_x20` (`work/over/Exag_x20.json`, 129 frames at base speed):
+
+| Phase | Share of length | Measured |
+|---|---|---|
+| Wind-up (anticipation) | ~16% (20 f) | chest coils 54° past guard (hips 21°, waist 33°), hips drop 0.36 and shift back 0.18, side tilt toward the rear hand (root -12, waist -16), head counter-turns so the eyes stay on target, 96% weight on the rear foot |
+| Strike | ~7% (9 f) | contact at ~22% of the length; fist peaks ~85 studs/s at base speed; hips turn ~62° from guard into contact |
+| Follow-through | ~25% (32 f to body settle) | body keeps folding (≈54° total forward fold) with hips held low (-0.39); weight goes ~97% onto the lead foot; fist travels on past the target, no stop |
+| Return to guard | ~52% (66 f) | slow and continuous; pullback peak ≤ 10% of the strike's peak speed, ≤ 0.45 studs per 4 frames |
+
+How 2.0 is built (`work/mkover.js`):
+- Anticipation and overshoot scale fully with e.
+- Contact scales by 1+0.35(e-1).
+- Yaw is capped (1.5× for anticipation and overshoot, 1.2× at contact) so the body never turns past the target. Extra twist is passed to the chest.
+- The fist path stays fixed while the body carries the exaggeration.
+- Timing: wind-up 14+6(e-1), strike 6+2.5(e-1), follow-through 11+7(e-1), return 42+24(e-1).
+
+**Pose style:** Boxer (house), Anime (long leaning lines, lunge, high rear-heel drive) and Corkscrew (hips lead, chest whips late) were all rated "decent". None was a clear winner, so combining them is open. Brawler (low, hunched, heavy) and Upright (tall, arm-led) were not chosen, so don't default to either.
+
 ## MANDATE: no snapping pullbacks (applies to every strike and every return, not only hit-to-guard)
 The user has rejected the same artifact three times (jab, cross, uppercut v3): a limb fully extended on one frame and tucked back a few frames later. Every pullback, recovery, retract or return-to-guard of any limb must be slow and continuous.
 - **Enforced by `lint.js`** (see the next section).
