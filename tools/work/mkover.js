@@ -78,7 +78,7 @@ const rearBall = [G.rear.pos[0] + BALL * Math.cos(G.rear.pitch * D) * rd0[0], G.
 const rearIdle = (f, ease) => ({ f, pos: G.rear.pos, pole: G.rear.pole, yaw: G.rear.yaw, pitch: G.rear.pitch, ease });
 const rearPivot = (f, yaw, pitch, ease, pole) => {
 	const d = dir(yaw), r = BALL * Math.cos(pitch * D);
-	return { f, pos: r3([rearBall[0] - r * d[0], G.rear.pos[1] - 0.104 + 0.5 * Math.sin(Math.abs(pitch) * D), rearBall[1] - r * d[2]]), pole: pole || r3(d), yaw, pitch, ease };
+	return { f, pos: r3([rearBall[0] - r * d[0], G.rear.pos[1] - 0.5 * Math.sin(Math.abs(G.rear.pitch) * D) + 0.5 * Math.sin(Math.abs(pitch) * D), rearBall[1] - r * d[2]]), pole: pole || r3(d), yaw, pitch, ease };
 };
 const leadIdle = (f, ease) => ({ f, pos: G.lead.pos, pole: G.lead.pole, yaw: G.lead.yaw, pitch: G.lead.pitch, ease });
 const P = V.rearPivot || { hit: [0, -36], over: [4, -44] };

@@ -35,6 +35,14 @@ How 2.0 is built (`work/mkover.js`):
 - The fist path stays fixed while the body carries the exaggeration.
 - Timing: wind-up 14+6(e-1), strike 6+2.5(e-1), follow-through 11+7(e-1), return 42+24(e-1).
 
+**Base pose per move family (user, 2026-10-15: "dont use the boxing pose for everything").** The boxing guard (`Boxing_Idle_Orthodox`) belongs to boxing moves only. Every other family gets its own start/end pose, designed for it, and its own idle if one is needed. The first non-boxing base is the **ki stance**, from `work/over/Ki_Blast.json`:
+- wider, deeper and more side-on than boxing: root (-2, -35, 0) at hip height -0.35;
+- lead ankle (-0.65, -2.929, -0.75) yaw 10; rear ankle (0.7, -2.86, 0.9) yaw -45, pitch -8;
+- lead hand out in front at chest height, torso (-0.6, 0.75, -1.45); rear hand low and ready, (0.8, 0.25, -1.25);
+- the neck brings the face forward.
+
+Moves in a non-boxing family don't chain from the boxing idle (lint `--no-chain`, no gallery Base).
+
 **Pose style:** Boxer (house), Anime (long leaning lines, lunge, high rear-heel drive) and Corkscrew (hips lead, chest whips late) were all rated "decent". None was a clear winner, so combining them is open. Brawler (low, hunched, heavy) and Upright (tall, arm-led) were not chosen, so don't default to either.
 
 ## MANDATE: no snapping pullbacks (applies to every strike and every return, not only hit-to-guard)
@@ -451,3 +459,4 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - **When the hand drops below the shoulder, turn the elbow outward first.** Use an explicit `rPoles` timeline (outward pole by f6) before the arm hangs, because a down-pointing pole lines up with a hanging arm and the IK picks a side at random.
   - **The twist metric was rewritten.** `posemetrics.armRoll` now carries the previous hinge across the arm's swing (minimal rotation) and measures the remaining roll. The old roll-against-world-up spiked falsely whenever the upper arm hung vertical (64°/frame on a ki blast that really twisted 34). The boxing set's numbers barely moved, so the gate still catches real twists.
 - (2026-10-15) Cleanup: the unchosen overhand variants were removed from Studio and disk. Only `Exag_x20` (gallery "Exaggeration 2.0x") remains as the profile reference.
+- (2026-10-15, user: "redo it, dont use the boxing pose for everything") **Ki_Blast v2** now starts and ends in its own ki stance (see the style profile), with the same 2.0 timing, charge, release and locked-on follow-through. It's standalone: no idle chain, gallery rig with no Base. The boxing-guard version is kept as the spec `work/over/Ki_Blast_boxguard.json`. The generator's rear-foot pivot height now derives from the guard's own heel pitch instead of the boxing value; it was a fixed -0.104, which sank a different rear foot.
