@@ -115,6 +115,10 @@ const sampleArm = (keys, f, side) => {
 					return { d: norm(v), r: len(v) };
 				};
 				const A = endpoint(a), B = endpoint(b);
+				if (a.lerp || b.lerp) {
+					const PA = add(S, scale(A.d, A.r)), PB = add(S, scale(B.d, B.r));
+					return { pos: toLocal(add(PA, scale(sub(PB, PA), t))), pole };
+				}
 				let s = t;
 				if (!a.aim && b.aim) s = Math.min(1, t * 2);
 				else if (a.aim && !b.aim) s = t;

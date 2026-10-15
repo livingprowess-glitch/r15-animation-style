@@ -1,0 +1,3 @@
+{"e":1.5,"label":"Style: Corkscrew (hip-shoulder whip)","lerp":true,
+"add":{"root":{"load":[0,8,0,0,0,0],"hit":[0,14,0,0,0,0],"hold":[0,12,0,0,0,0]},"waist":{"load":[-2,-24,-6],"hit":[0,-14,0],"hold":[-4,12,6]},"neck":{"load":[0,18,4],"hit":[0,0,0],"hold":[0,-20,-4]}},
+"rearPivot":{"hit":[4,-46],"over":[8,-54]}}

@@ -108,20 +108,33 @@ if (hit !== null) {
 		if (d > best) { best = d; striker = part; }
 	}
 }
+const lastPose = at(lastFrame);
+const pullbackStart = part => {
+	if (hit === null) return from;
+	const goal = lastPose.parts[part].p;
+	let best = from, far = -1;
+	for (const p of poses) {
+		if (p.frame < hit || p.frame > hit + 30) continue;
+		const q = p.parts[part].p, d = Math.hypot(q[0] - goal[0], q[1] - goal[1], q[2] - goal[2]);
+		if (d > far) { far = d; best = p.frame; }
+	}
+	return Math.max(from, best);
+};
 for (const part of M.EXTREMITIES) {
-	const tr = M.travel(poses, part, from, LIMIT.snapWin);
-	const after = tr.speed.filter(s => s.frame > from);
+	const pfrom = pullbackStart(part);
+	const tr = M.travel(poses, part, pfrom, LIMIT.snapWin);
+	const after = tr.speed.filter(s => s.frame > pfrom);
 	const pkAfter = after.length ? after.reduce((m, s) => (s.v > m.v ? s : m)) : { v: 0, frame: -1 };
 	let status = tr.worst.d > LIMIT.snapStuds ? "FAIL" : "ok";
-	let detail = `most travel in any 4 frames${hit !== null ? ` after f${from}` : ""}: ${tr.worst.d.toFixed(2)} studs (f${tr.worst.frame})`;
+	let detail = `most travel in any 4 frames${hit !== null ? ` after f${pfrom} (pullback start)` : ""}: ${tr.worst.d.toFixed(2)} studs (f${tr.worst.frame})`;
 	if (part === striker) {
-		const pkStrike = tr.speed.filter(s => s.frame <= from).reduce((m, s) => (s.v > m.v ? s : m));
+		const pkStrike = tr.speed.filter(s => s.frame <= pfrom).reduce((m, s) => (s.v > m.v ? s : m));
 		const ratio = pkAfter.v / pkStrike.v;
 		if (ratio > LIMIT.snapRatio) status = "FAIL";
 		detail += `; pullback peak ${Math.round(ratio * 100)}% of strike peak (f${pkAfter.frame} vs f${pkStrike.frame})`;
 	}
 	if (speed !== 1) {
-		const g = M.travel(poses, part, from, Math.round(LIMIT.snapWin * speed));
+		const g = M.travel(poses, part, pfrom, Math.round(LIMIT.snapWin * speed));
 		detail += `; at game speed x${speed}: ${g.worst.d.toFixed(2)} studs per 4 game frames (info)`;
 	}
 	add(`${part} pullback snap${part === striker ? " (striking limb)" : ""}`, status, detail);

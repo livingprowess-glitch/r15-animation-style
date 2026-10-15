@@ -396,3 +396,24 @@ Append each user correction here as a rule: what was wrong, which joint, and the
   - Never end the body's follow-through on the same frame as the arm's hold.
   - Never let a limb reverse along its own path. Make it arc.
   - These are now lint gates (whole-body freeze; sudden reversal > 75°). Calibration: the user flagged 101°, and the approved hooks sit at 74°.
+- (2026-10-15) **Preference test sets built; waiting on the user's picks.** The move is an original overhand right, `work/mkover.js <variant.json> <name>` with specs in `work/over/`.
+  - **How the generator works:** every key = guard + scaled (house delta + style add).
+    - Exaggeration `e` scales the anticipation (wind-up depth ×e, wind-up length 14+6(e-1) frames) and the follow-through overshoot (×e) fully, but the contact pose only by 1+0.35(e-1).
+    - Yaw is capped at 1.5× for the wind-up and overshoot and 1.2× at contact. Pitch and roll are capped at 2.2×, hip translation at 1.8×. Any root yaw beyond -26/+74 of the guard is handed to the waist.
+    - Strike length is 6+2.5(e-1) frames; follow-through 11+7(e-1); return to guard 42+24(e-1).
+  - **Exaggeration set** (house Boxer pose, chains from the idle): `Exag_x10 / x15 / x20 / x25`. 3.0× was dropped: a real 60°/frame arm twist at contact from the extreme body brake.
+  - **Pose-style set** (all at e 1.5):
+    - `Style_Boxer` (house);
+    - `Style_Brawler` (low, hunched, wide gloves, heavy fold);
+    - `Style_Anime` (long leaning lines, lunge, high heel drive);
+    - `Style_Upright` (tall, chin up, arm-led, less body);
+    - `Style_Corkscrew` (hips lead and the chest lags, then whips past).
+
+    Gallery rows sit 28 and 42 studs behind the boxing row.
+  - **Lessons from building them:**
+    - Aim strikes at *this* style's chin, measured from a posedump. A target above the chin lines the arm up with the elbow pole and the IK flips (130–160°/frame).
+    - Styles that lean the chest forward need a more outward elbow pole (1, 0.3, 0.2).
+    - A follow-through blended between two directions about 120° apart sweeps fastest mid-segment. The `lerp: true` arm-key flag in ikbake makes the segment a straight line in world space instead (opt-in; boxing builds are byte-identical).
+    - World-pinned follow-through points send the return through the body; keep follow-through endpoints in chest space.
+  - **Lint change:** the pullback gate now starts where the hand is farthest from its final pose after the hit (the real pullback start), not at hit+2. A drive-through follow-through is no longer counted as a pullback. All boxing strikes still pass.
+  - **When the user picks:** record the chosen `e` and style as the default first-draft profile here and in memory, and delete the unchosen variants (modules, gallery rigs, source files).
